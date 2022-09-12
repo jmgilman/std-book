@@ -76,7 +76,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html">Introduction</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="overview.html">Overview</a></li><li class="chapter-item expanded "><a href="introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -144,9 +144,9 @@ using an example Rust project. At the end of this book, you'll have a completely
 framework.</p>
 <h2 id="how-this-book-is-organized"><a class="header" href="#how-this-book-is-organized">How this book is organized</a></h2>
 <p>This book is broken up into several chapters. Each chapter tackles a component
-of <code>std</code>, building on the work done in the previous chapters. As such, the
-book is intended to be read from start to finish; however, each chapter is
-written in a way that can still be useful as a quick reference.</p>
+of <code>std</code>, building on the work done in the previous chapters. As such, the book
+is intended to be read from start to finish; however, each chapter is written in
+a way that can still be useful as a quick reference.</p>
 <p>Since <code>std</code> is a <a href="https://nixos.org">Nix</a> framework intended to be used to organize code
 repositories, it makes sense to work through applying it to an example project.
 In this book, we're using a very basic Rust project, for which the source code
@@ -154,6 +154,59 @@ can be <a href="https://github.com/jmgilman/std-book/tree/master/rust">found her
 <p>Throughout the book, we'll be building out a <code>std</code> environment which uses the
 above example project. The final source code for the completed example project
 can be <a href="https://github.com/jmgilman/std-book/tree/master/final">found here</a>.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="introduction-1"><a class="header" href="#introduction-1">Introduction</a></h1>
+<p>The <a href="https://github.com/divnix/std"><code>std</code></a> (short for standard) framework is an opinionated <a href="https://nixos.org">Nix</a>
+<a href="https://nixos.wiki/wiki/Flakes">flakes</a> framework that aims to solve the problem of complexity that
+often arises in large Nix-based projects. It's opinionated because it prescribes
+a standard, flake-based structure for repositories using Nix. As with most
+frameworks with this characteristic, it eliminates the question of <strong>how</strong> Nix
+code should be organized, ultimately serving as a boon for productivity.</p>
+<p>In this chapter, we will briefly introduce the framework as a whole. As a
+reminder, this book will be starting off with an <a href="https://github.com/jmgilman/std-book/tree/master/rust">example Rust project</a>
+and then slowly integrating the <code>std</code> framework into it. It's recommended you
+clone the repository locally and follow along with the book for the best
+learning experience.</p>
+<p>The Rust project is intentionally barebones as it's not the primary focus of the
+book. As a quick overview, the project produces a single binary that takes one
+argument and uses it to print a string in the format of, <code>Hello, &lt;arg&gt;!</code>. It
+contains a single unit test that confirms the above logic works as expected.</p>
+<h2 id="why-std"><a class="header" href="#why-std">Why std?</a></h2>
+<p><code>std</code> aims to provide a rigid framework for organizing Nix code in a repository.
+Why is this even necessary? The primary reason is that, because Nix can more or
+less do anything, it follows that by nature, it tends to become progressively
+less organized the more lines of it you add to your repository. While flakes
+helped to bring some organization to the entry point of a Nix environment, it
+also disrupted it in other ways (i.e., what to do with <code>system</code>). In the case of
+a monorepo, this nature can quickly become crippling and can result in all sorts
+of unique &quot;frameworks&quot; being developed by each team to address it.</p>
+<p>For these reasons, <code>std</code> was developed to help reign in large Nix codebases.
+However, it's not only for large projects. As we'll see in this article, it can
+be used in projects of any size and naturally grows along with them. Indeed,
+this is the preferred approach because it tackles the complexity before it has a
+chance to grow too unwieldy.</p>
+<h2 id="how-std-is-organized"><a class="header" href="#how-std-is-organized">How std is Organized</a></h2>
+<p>The <code>std</code> framework is broken up into three organizational levels:</p>
+<ul>
+<li><strong>Repository</strong>: This might seem like a given, but the repository serves as the
+highest level of organization within std. One could consider it an organism
+made up of one or more cells.</li>
+<li><strong>Cell</strong>: The largest organizational unit, a cell typically encompasses a
+single component of a repository. In a monorepo, there could be one cell per
+service/binary in the repository. An entire cell could be dedicated to the
+automation within a repository for smaller projects.</li>
+<li><strong>Cell block</strong>: A cell block is a subcomponent of a cell and serves to further
+subdivide a cell into smaller components. In particular, cell blocks are
+typed, meaning each falls within a category that defines the functionality the
+cell block provides. The meaning of this will become more apparent later on.</li>
+</ul>
+<p>It's worth noting that cell blocks were previously referred to as organelles,
+and cell block types were referred to as clades. These have recently changed to
+ease adoption.</p>
+<p>While the presence of cells and cell blocks helps to define an organizational
+framework, at the same time, the ambiguity as to how cells should be organized
+provides a necessary degree of flexibility. In this book, we'll give a sample
+cell structure for our project, but the method proposed here is by no means the
+best one for every project.</p>
 
                     </main>
 
