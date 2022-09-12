@@ -1,1 +1,6 @@
+.std/
 target/
+result/
+
+# nixago-auto-created: mdbook-build-folder
+docs/book/**
