@@ -17,7 +17,7 @@ l.mapAttrs (_: std.std.lib.mkShell) {
     ];
     commands = [
       {
-        name = "preview";
+        name = "serve";
         command = "mdbook serve";
         help = "Serves the docs at http://localhost:3000";
         category = "Development";
