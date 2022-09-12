@@ -11,7 +11,6 @@ in
       book = {
         language = "en";
         multilingual = false;
-        src = "docs";
         title = "Documentation";
       };
     };

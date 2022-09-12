@@ -11,7 +11,7 @@ in
     version = "0.1.0";
     src = std.incl (inputs.self) [
       (inputs.self + /book.toml)
-      (inputs.self + /docs)
+      (inputs.self + /src)
     ];
 
     buildInputs = [ mdbook ];
