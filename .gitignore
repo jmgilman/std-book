@@ -2,8 +2,8 @@
 target/
 result
 
-# nixago-auto-created: mdbook-build-folder
-docs/book/**
-
 # nixago: ignore-linked-files
 .mdformat.toml
+
+# nixago-auto-created: mdbook-build-folder
+book/**
