@@ -8,7 +8,10 @@ in
 l.mapAttrs (_: std.std.lib.mkShell) {
   default = { ... }: {
     name = "std-book devshell";
-    nixago = [ cell.configs.mdbook ];
+    nixago = [
+      cell.configs.mdbook
+      cell.configs.mdformat
+    ];
     packages = [
       nixpkgs.mdbook
     ];
@@ -17,7 +20,13 @@ l.mapAttrs (_: std.std.lib.mkShell) {
         name = "preview";
         command = "mdbook serve";
         help = "Serves the docs at http://localhost:3000";
-        category = "Docs";
+        category = "Development";
+      }
+      {
+        name = "fmt";
+        command = "mdformat src";
+        help = "Formats the book's markdown files";
+        category = "Development";
       }
     ];
   };

@@ -15,4 +15,13 @@ in
       };
     };
   };
+  mdformat = std.std.lib.mkNixago
+    {
+      configData = {
+        wrap = 80;
+      };
+      output = ".mdformat.toml";
+      format = "toml";
+      commands = [{ package = nixpkgs.python310Packages.mdformat; }];
+    };
 }
