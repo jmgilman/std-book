@@ -3,7 +3,7 @@ on:
   push:
     branches:
       - master
-    paths-include:
+    paths:
       - "src/**"
       - "book.toml"
   workflow_dispatch:
