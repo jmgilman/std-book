@@ -10,11 +10,11 @@ framework.
 ## How this book is organized
 
 This book is broken up into several chapters. Each chapter tackles a component
-of `std`, building on the work done in the previous chapters. As such, the
-book is intended to be read from start to finish; however, each chapter is
-written in a way that can still be useful as a quick reference.
+of `std`, building on the work done in the previous chapters. As such, the book
+is intended to be read from start to finish; however, each chapter is written in
+a way that can still be useful as a quick reference.
 
-Since `std` is a [Nix][nix] framework intended to be used to organize code
+Since `std` is a [Nix] framework intended to be used to organize code
 repositories, it makes sense to work through applying it to an example project.
 In this book, we're using a very basic Rust project, for which the source code
 can be [found here][prj-src].
