@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Introduction - Documentation</title>
+        <title>Flake - Documentation</title>
         <!-- Custom HTML head -->
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
@@ -75,7 +75,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="overview.html">Overview</a></li><li class="chapter-item expanded "><a href="introduction.html" class="active"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="flake.html"><strong aria-hidden="true">2.</strong> Flake</a></li><li class="chapter-item expanded "><a href="runnables.html"><strong aria-hidden="true">3.</strong> Runnables</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="overview.html">Overview</a></li><li class="chapter-item expanded "><a href="introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="flake.html" class="active"><strong aria-hidden="true">2.</strong> Flake</a></li><li class="chapter-item expanded "><a href="runnables.html"><strong aria-hidden="true">3.</strong> Runnables</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -134,68 +134,118 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="introduction"><a class="header" href="#introduction">Introduction</a></h1>
-<p>The <a href="https://github.com/divnix/std"><code>std</code></a> (short for standard) framework is an opinionated <a href="https://nixos.org">Nix</a>
-<a href="https://nixos.wiki/wiki/Flakes">flakes</a> framework that aims to solve the problem of complexity that
-often arises in large Nix-based projects. It's opinionated because it prescribes
-a standard, flake-based structure for repositories using Nix. As with most
-frameworks with this characteristic, it eliminates the question of <strong>how</strong> Nix
-code should be organized, ultimately serving as a boon for productivity.</p>
-<p>In this chapter, we will briefly introduce the framework as a whole. As a
-reminder, this book will be starting off with an <a href="https://github.com/jmgilman/std-book/tree/master/rust">example Rust project</a>
-and then slowly integrating the <code>std</code> framework into it. It's recommended you
-clone the repository locally and follow along with the book for the best
-learning experience.</p>
-<p>The Rust project is intentionally barebones as it's not the primary focus of the
-book. As a quick overview, the project produces a single binary that takes one
-argument and uses it to print a string in the format of, <code>Hello, &lt;arg&gt;!</code>. It
-contains a single unit test that confirms the above logic works as expected.</p>
-<h2 id="why-std"><a class="header" href="#why-std">Why Std?</a></h2>
-<p><code>std</code> aims to provide a rigid framework for organizing Nix code in a repository.
-Why is this even necessary? The primary reason is that, because Nix can more or
-less do anything, it follows that by nature, it tends to become progressively
-less organized the more lines of it you add to your repository. While flakes
-helped to bring some organization to the entry point of a Nix environment, it
-also disrupted it in other ways (i.e., what to do with <code>system</code>). In the case of
-a monorepo, this nature can quickly become crippling and can result in all sorts
-of unique &quot;frameworks&quot; being developed by each team to address it.</p>
-<p>For these reasons, <code>std</code> was developed to help reign in large Nix codebases.
-However, it's not only for large projects. As we'll see in this article, it can
-be used in projects of any size and naturally grows along with them. Indeed,
-this is the preferred approach because it tackles the complexity before it has a
-chance to grow too unwieldy.</p>
-<h2 id="std-organization"><a class="header" href="#std-organization">Std Organization</a></h2>
-<p>The <code>std</code> framework is broken up into three organizational levels:</p>
+                        <h1 id="flake"><a class="header" href="#flake">Flake</a></h1>
+<p>The starting point for integrating std with our example project is defining a
+flake.nix file at the root of our repository. As mentioned previously, <code>std</code> is
+a <em>flake-based</em> framework, and usage of Nix flakes is not optional.</p>
+<p>Throughout this book, we'll be sharing snippets of our growing integration.
+These snippets will make excessive use of localized comments to explain
+concepts, as the proximity of these tends to make explanations much more
+effective. As our code base grows, repeat code will have comments stripped and
+only the new additions will be commented.</p>
+<h2 id="our-std-flake"><a class="header" href="#our-std-flake">Our <code>std</code> Flake</a></h2>
+<pre><code class="language-nix">{
+  # Like any flake, we define a set of inputs that should be accessible to our
+  # project. Here, we include the `std` library and the latest version of
+  # nixpkgs.
+  inputs.std.url = &quot;github:divnix/std&quot;;
+  inputs.nixpkgs.url = &quot;nixpkgs&quot;;
+
+  # As per the flake schema, we define an attribute for holding the outputs of
+  # our flake. In this case, `std` will be responsible for managing the outputs.
+  outputs = { std, ... } @ inputs:
+    # The `growOn` function can be seen as the main entrypoint into `std`. It is
+    # responsible for growing our &quot;organism&quot; through cells into the final
+    # product. It will produce an output schema that is specific to `std` and
+    # can be further explored through the `std` CLI/TUI.
+    #
+    # The `growOn` function is similar to `grow` but allows us to expand our
+    # flake outputs to include more than just what `std` generates by default.
+    # It takes a variable number of attribute sets after the first one which
+    # defines how it behaves and will recursively update them into one final
+    # set. Without this, we would only be able to use the `std` CLI/TUI, as by
+    # default `std` places outputs under the `__std` attribute which the nix CLI
+    # knows nothing about.
+    std.growOn
+      {
+        # Necessary for `std` to perform its magic.
+        inherit inputs;
+
+        # This is one of the most important arguments for the `grow` function.
+        # It defines the path where `std` will search for our cells. In this
+        # case, we're specifying the `nix` subdirectory. A cell, in this case,
+        # would be defined in a subdirectory under `nix` (i.e. ./nix/cell).
+        cellsFrom = ./nix;
+
+        # This is the second most important argument for the `grow` function. It
+        # informs `std` of the block types that exist within our cells and where
+        # they can be found. In this case, we're specifying that we have
+        # &quot;runnable&quot; block types that can be found in an `apps.nix` file under
+        # the cell directory.
+        #
+        # The `std` framework has many different block types, and they primarily
+        # dictate how the `std` CLI/TUI will behave. For example, the `runnable`
+        # type will allow us to run our cell block as an executable using:
+        #
+        # &gt; std //std-example/apps/default:run
+        #
+        # The `run` action is available because we've specified the `runnable`
+        # cell block type. In this case, we're running the `default` target
+        # which is defined as a derivation in ./nix/std-example/apps.nix that
+        # builds our binary.
+        cellBlocks = [
+          (std.blockTypes.runnables &quot;apps&quot;)
+        ];
+      }
+      # This second argument, as described above, allows us to expand what gets
+      # included in our flake output. In this case, we're using the built-in
+      # `harvest` function to &quot;harvest&quot; the derivations from our apps cell
+      # block into the `packages` attribute of our flake output. This allows us
+      # to interact with our flake using the nix CLI. For example, we can run
+      #
+      # &gt; nix run .#default
+      #
+      # Which will build and run our binary.
+      {
+        packages = std.harvest inputs.self [ [ &quot;example&quot; &quot;apps&quot; ] ];
+      };
+}
+</code></pre>
+<p>Much of the structure presented above should not be surprising as there is no
+major deviation from the <a href="https://nixos.wiki/wiki/Flakes#Flake_schema">expected flake schema</a>. Perhaps the
+largest change occurs in that this structure is primarily generateed by <code>std</code>
+through the <a href="https://github.com/divnix/std/blob/main/src/grow-on.nix"><code>grow-on</code> function</a>. The arguments to this function are
+where we primarily derive the structure we discussed in the <a href="introduction.html">previous
+chapter</a>. Of note are the following:</p>
 <ul>
-<li><strong>Repository</strong>: This might seem like a given, but the repository serves as the
-highest level of organization within std. One could consider it an organism
-made up of one or more cells.</li>
-<li><strong>Cell</strong>: The largest organizational unit, a cell typically encompasses a
-single component of a repository. In a monorepo, there could be one cell per
-service/binary in the repository. An entire cell could be dedicated to the
-automation within a repository for smaller projects.</li>
-<li><strong>Cell block</strong>: A cell block is a subcomponent of a cell and serves to further
-subdivide a cell into smaller components. In particular, cell blocks are
-typed, meaning each falls within a category that defines the functionality the
-cell block provides. The meaning of this will become more apparent later on.</li>
+<li><code>cellsFrom</code>: The cells that make up our <em>organism</em> must be defined in a single
+folder within our repository. It's idiomatic to name this folder either
+<code>cells</code> or <code>nix</code>. Within this directory, each cell is isolated into a
+subdirectory, with all of its cell blocks further nested under this
+subdirectory.</li>
+<li><code>cellBlock</code>: Each cell consists of one or more blocks which are defined here
+in list form. Recall that cell blocks are <em>typed</em>, and the general format for
+defining them is <code>(std.blockTypes.&lt;type&gt; &quot;&lt;name&gt;&quot;)</code>; where <code>&lt;type&gt;</code> is a valid
+block type as <a href="https://github.com/divnix/std/tree/main/src/blocktypes">defined here</a> and <code>&lt;name&gt;</code> is where <code>std</code> should
+look for the cell block under the parent cell's folder.</li>
 </ul>
-<p>It's worth noting that cell blocks were previously referred to as organelles,
-and cell block types were referred to as clades. These have recently changed to
-ease adoption.</p>
-<p>While the presence of cells and cell blocks helps to define an organizational
-framework, at the same time, the ambiguity as to how cells should be organized
-provides a necessary degree of flexibility. In this book, we'll give a sample
-cell structure for our project, but the method proposed here is by no means the
-best one for every project.</p>
+<p>With these two arguments we are able to bring cohesion to our otherwise
+disunified Nix code. We know where cells are defined, what block types are
+available, and where to find them. Determining where our <em>runnables</em> exist is
+simply a matter of examining our <code>flake.nix</code> and following the paths
+accordingly.</p>
+<p>The <code>growOn</code> function takes a variadic number of additional arguments and is
+what differentiates it from its <a href="https://github.com/divnix/std/blob/main/src/grow.nix">sibling function</a> (<code>grow</code>). We will dive
+deeper into these additional arguments in a future chapter.</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="overview.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="introduction.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
-                            <a rel="next" href="flake.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next" href="runnables.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
                         <div style="clear: both"></div>
@@ -204,10 +254,10 @@ best one for every project.</p>
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="overview.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="introduction.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
-                    <a rel="next" href="flake.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next" href="runnables.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>

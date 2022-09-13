@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Introduction - Documentation</title>
+        <title>Runnables - Documentation</title>
         <!-- Custom HTML head -->
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
@@ -75,7 +75,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="overview.html">Overview</a></li><li class="chapter-item expanded "><a href="introduction.html" class="active"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="flake.html"><strong aria-hidden="true">2.</strong> Flake</a></li><li class="chapter-item expanded "><a href="runnables.html"><strong aria-hidden="true">3.</strong> Runnables</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="overview.html">Overview</a></li><li class="chapter-item expanded "><a href="introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="flake.html"><strong aria-hidden="true">2.</strong> Flake</a></li><li class="chapter-item expanded "><a href="runnables.html" class="active"><strong aria-hidden="true">3.</strong> Runnables</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -134,69 +134,109 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="introduction"><a class="header" href="#introduction">Introduction</a></h1>
-<p>The <a href="https://github.com/divnix/std"><code>std</code></a> (short for standard) framework is an opinionated <a href="https://nixos.org">Nix</a>
-<a href="https://nixos.wiki/wiki/Flakes">flakes</a> framework that aims to solve the problem of complexity that
-often arises in large Nix-based projects. It's opinionated because it prescribes
-a standard, flake-based structure for repositories using Nix. As with most
-frameworks with this characteristic, it eliminates the question of <strong>how</strong> Nix
-code should be organized, ultimately serving as a boon for productivity.</p>
-<p>In this chapter, we will briefly introduce the framework as a whole. As a
-reminder, this book will be starting off with an <a href="https://github.com/jmgilman/std-book/tree/master/rust">example Rust project</a>
-and then slowly integrating the <code>std</code> framework into it. It's recommended you
-clone the repository locally and follow along with the book for the best
-learning experience.</p>
-<p>The Rust project is intentionally barebones as it's not the primary focus of the
-book. As a quick overview, the project produces a single binary that takes one
-argument and uses it to print a string in the format of, <code>Hello, &lt;arg&gt;!</code>. It
-contains a single unit test that confirms the above logic works as expected.</p>
-<h2 id="why-std"><a class="header" href="#why-std">Why Std?</a></h2>
-<p><code>std</code> aims to provide a rigid framework for organizing Nix code in a repository.
-Why is this even necessary? The primary reason is that, because Nix can more or
-less do anything, it follows that by nature, it tends to become progressively
-less organized the more lines of it you add to your repository. While flakes
-helped to bring some organization to the entry point of a Nix environment, it
-also disrupted it in other ways (i.e., what to do with <code>system</code>). In the case of
-a monorepo, this nature can quickly become crippling and can result in all sorts
-of unique &quot;frameworks&quot; being developed by each team to address it.</p>
-<p>For these reasons, <code>std</code> was developed to help reign in large Nix codebases.
-However, it's not only for large projects. As we'll see in this article, it can
-be used in projects of any size and naturally grows along with them. Indeed,
-this is the preferred approach because it tackles the complexity before it has a
-chance to grow too unwieldy.</p>
-<h2 id="std-organization"><a class="header" href="#std-organization">Std Organization</a></h2>
-<p>The <code>std</code> framework is broken up into three organizational levels:</p>
+                        <h1 id="runnables"><a class="header" href="#runnables">Runnables</a></h1>
+<p>The flake, by itself, is not sufficient for a working example. We've told <code>std</code>
+that our cells have <code>runnable</code> blocks, and yet we've neither created the cell
+nor defined any blocks.</p>
+<p>To resolve this, we'll create a new file: <code>./nix/example/apps.nix</code>.</p>
 <ul>
-<li><strong>Repository</strong>: This might seem like a given, but the repository serves as the
-highest level of organization within std. One could consider it an organism
-made up of one or more cells.</li>
-<li><strong>Cell</strong>: The largest organizational unit, a cell typically encompasses a
-single component of a repository. In a monorepo, there could be one cell per
-service/binary in the repository. An entire cell could be dedicated to the
-automation within a repository for smaller projects.</li>
-<li><strong>Cell block</strong>: A cell block is a subcomponent of a cell and serves to further
-subdivide a cell into smaller components. In particular, cell blocks are
-typed, meaning each falls within a category that defines the functionality the
-cell block provides. The meaning of this will become more apparent later on.</li>
+<li><code>./nix/</code>: Defined in our <code>cellsFrom</code> argument</li>
+<li><code>./example/</code>: The name of our cell.</li>
+<li><code>apps.nix</code>: The name of our cell block.</li>
 </ul>
-<p>It's worth noting that cell blocks were previously referred to as organelles,
-and cell block types were referred to as clades. These have recently changed to
-ease adoption.</p>
-<p>While the presence of cells and cell blocks helps to define an organizational
-framework, at the same time, the ambiguity as to how cells should be organized
-provides a necessary degree of flexibility. In this book, we'll give a sample
-cell structure for our project, but the method proposed here is by no means the
-best one for every project.</p>
+<p>Hopefully, the <code>std</code> structure is starting to become natural now. Here is the
+contents of our file:</p>
+<pre><code class="language-nix"># A common `std` idiom is to place all buildables for a cell in a `apps.nix`
+# cell block. This is not required, and you can name this cell block anything
+# that makes sense for your project.
+#
+# This cell block is used to define how our example application is built.
+# Ultimately, this means it produces a nix derivation that, when evalulated,
+# produces our binary.
+
+# The function arguments shown here are universal to all cell blocks. We are
+# provided with the inputs from our flake and a `cell` attribute which refers
+# to the parent cell this block falls under. Note that the inputs are
+# &quot;desystematized&quot; and are not in the same format as the `inputs` attribute in
+# the flake. This is a key benefit afforded by `std`.
+{ inputs
+, cell
+}:
+let
+  # The `inputs` attribute allows us to access all of our flake inputs.
+  inherit (inputs) nixpkgs std;
+
+  # This is a common idiom for combining lib with builtins.
+  l = nixpkgs.lib // builtins;
+in
+{
+  # We can think of this attribute set as what would normally be contained under
+  # `outputs.packages` in our flake.nix. In this case, we're defining a default
+  # package which contains a derivation for building our binary.
+  default = with inputs.nixpkgs; rustPlatform.buildRustPackage {
+    pname = &quot;example&quot;;
+    version = &quot;0.1.0&quot;;
+
+    # `std` includes some useful helper functions, one of which is `incl` which
+    # handles filtering out unwanteed files from our package src. The benefit
+    # here is it reduces unecessary builds by limiting the input files of our
+    # derivation to only those that are needed to build it.
+    src = std.incl (inputs.self) [
+      (inputs.self + /Cargo.toml)
+      (inputs.self + /Cargo.lock)
+      (inputs.self + /src)
+    ];
+    cargoLock = {
+      lockFile = inputs.self + &quot;/Cargo.lock&quot;;
+    };
+
+    meta = {
+      description = &quot;An example Rust binary which greets the user&quot;;
+    };
+  };
+}
+</code></pre>
+<h2 id="standardized-arguments"><a class="header" href="#standardized-arguments">Standardized Arguments</a></h2>
+<p>One of the major benefits of <code>std</code> can be seen on the first few lines of Nix
+code. As is fairly typical with Nix, the file serves as one large function. The
+significance of the argument structure can be easily overlooked, though. This
+structure can be viewed as the <em>standardized</em> form of all cell blocks. From
+these two arguments it's possible to derive <em>all</em> values required to perform our
+required logic.</p>
+<p>Again, this cannot be overstated: we define the arguments the same way each time
+and are gauranteed access to all of the tools and data required to perform our
+logic. Historically, passing around information in Nix has been a major pain
+point. The further down the rabbit hole we go, the more difficult it is to bring
+the required information to perform the tasks at the bottom. We can visualize
+the benefit <code>std</code> brings here with a small table:</p>
+<div class="table-wrapper"><table><thead><tr><th>type</th><th><code>inputs</code></th><th><code>cell</code></th><th><code>inputs.cells</code></th></tr></thead><tbody>
+<tr><td>packages</td><td><code>inputs.nixpkgs</code></td><td><code>cell.runnables</code></td><td><code>inputs.cells.*.runnable</code></td></tr>
+<tr><td>functions</td><td><code>inputs.nixpkgs.lib</code></td><td><code>cell.functions</code></td><td><code>inputs.cells.*.functions</code></td></tr>
+<tr><td>...</td><td><code>inputs.*</code></td><td><code>cell.*</code></td><td><code>inputs.cells.*.*</code></td></tr>
+</tbody></table>
+</div>
+<p>With this structure, we can access all of our flake inputs (including
+<code>nixpkgs</code>), all local cell blocks, and even cell blocks from sibling cells. No
+matter how large our project grows, the same pattern for traversing it will be
+maintained.</p>
+<h2 id="standardized-package-definitions"><a class="header" href="#standardized-package-definitions">Standardized Package Definitions</a></h2>
+<p>The remainder of the file should look familiar to those attuned to Nix. It's
+nothing more than an attribute set where the name is a package name and the
+value is a derivation. This section, of course, benefits from our standardized
+arguments because we can easily access everything we need to build a proper
+derivation for our Rust binary.</p>
+<p>In addition to the above, <code>std</code> also ships with some useful helper functions for
+performing standard Nix operations. In our example, we utilize <code>std.include</code> to
+filter out the source files for our project. Since derivations are hashed based
+on their inputs, limiting inputs is best practice to maximize cache usage and
+avoid unnecessary rebuilding of our binary.</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="overview.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="flake.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
-                            </a>
-                            <a rel="next" href="flake.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                                <i class="fa fa-angle-right"></i>
                             </a>
                         <div style="clear: both"></div>
                     </nav>
@@ -204,11 +244,8 @@ best one for every project.</p>
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="overview.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="flake.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
-                    </a>
-                    <a rel="next" href="flake.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                        <i class="fa fa-angle-right"></i>
                     </a>
             </nav>
 
