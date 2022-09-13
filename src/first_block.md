@@ -1,16 +1,16 @@
-# Runnables
+# Our First Cell Block
 
 The flake, by itself, is not sufficient for a working example. We've told `std`
-that our cells have `runnable` blocks, and yet we've neither created the cell
-nor defined any blocks.
+that our cells have `runnable` blocks, yet we've neither created the cell nor
+defined any blocks.
 
 To resolve this, we'll create a new file: `./nix/example/apps.nix`.
 
-- `./nix/`: Defined in our `cellsFrom` argument
+- `./nix/`: Defined in our `cellsFrom` argument in the `flake.nix`
 - `./example/`: The name of our cell.
 - `apps.nix`: The name of our cell block.
 
-Hopefully, the `std` structure is starting to become natural now. Here is the
+Hopefully, the `std` structure is starting to become natural now. Here are the
 contents of our file:
 
 ```nix
@@ -67,15 +67,15 @@ in
 
 ## Standardized Arguments
 
-One of the major benefits of `std` can be seen on the first few lines of Nix
-code. As is fairly typical with Nix, the file serves as one large function. The
-significance of the argument structure can be easily overlooked, though. This
-structure can be viewed as the _standardized_ form of all cell blocks. From
-these two arguments it's possible to derive _all_ values required to perform our
-required logic.
+One of the major benefits of `std` can be seen in the first few lines of Nix
+code. As is fairly typical with Nix, the file serves as one large function;
+however, the significance of the argument structure can be easily overlooked,
+though. This structure can be viewed as the _standardized_ form of all cell
+blocks. From these two arguments, it's possible to derive _all_ values required
+to perform our required logic.
 
 Again, this cannot be overstated: we define the arguments the same way each time
-and are gauranteed access to all of the tools and data required to perform our
+and are guaranteed access to all of the tools and data required to perform our
 logic. Historically, passing around information in Nix has been a major pain
 point. The further down the rabbit hole we go, the more difficult it is to bring
 the required information to perform the tasks at the bottom. We can visualize
@@ -103,5 +103,5 @@ derivation for our Rust binary.
 In addition to the above, `std` also ships with some useful helper functions for
 performing standard Nix operations. In our example, we utilize `std.include` to
 filter out the source files for our project. Since derivations are hashed based
-on their inputs, limiting inputs is best practice to maximize cache usage and
-avoid unnecessary rebuilding of our binary.
+on their inputs, limiting inputs is the best practice to maximize cache usage
+and avoid the unnecessary rebuilding of our binary.

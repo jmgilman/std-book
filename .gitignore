@@ -1,4 +1,5 @@
 .std/
+.vscode/
 target/
 result
 
