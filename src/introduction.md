@@ -18,7 +18,7 @@ book. As a quick overview, the project produces a single binary that takes one
 argument and uses it to print a string in the format of, `Hello, <arg>!`. It
 contains a single unit test that confirms the above logic works as expected.
 
-## Why std?
+## Why Std?
 
 `std` aims to provide a rigid framework for organizing Nix code in a repository.
 Why is this even necessary? The primary reason is that, because Nix can more or
@@ -35,7 +35,7 @@ be used in projects of any size and naturally grows along with them. Indeed,
 this is the preferred approach because it tackles the complexity before it has a
 chance to grow too unwieldy.
 
-## How std is Organized
+## Std Organization
 
 The `std` framework is broken up into three organizational levels:
 
