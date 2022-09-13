@@ -10,7 +10,8 @@ l.mapAttrs (_: std.std.lib.mkShell) {
     name = "std-book devshell";
     nixago = [
       cell.configs.mdbook
-      cell.configs.mdformat
+      cell.configs.prettier
+      cell.configs.treefmt
     ];
     packages = [
       nixpkgs.mdbook
@@ -24,7 +25,7 @@ l.mapAttrs (_: std.std.lib.mkShell) {
       }
       {
         name = "fmt";
-        command = "mdformat src";
+        command = "treefmt src";
         help = "Formats the book's markdown files";
         category = "Development";
       }

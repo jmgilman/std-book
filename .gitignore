@@ -3,6 +3,8 @@ target/
 result
 
 # nixago: ignore-linked-files
+treefmt.toml
+.prettierrc
 .mdformat.toml
 
 # nixago-auto-created: mdbook-build-folder

@@ -15,13 +15,32 @@ in
       };
     };
   };
-  mdformat = std.std.lib.mkNixago
+  prettier = std.std.lib.mkNixago
     {
       configData = {
-        wrap = 80;
+        printWidth = 80;
+        proseWrap = "always";
       };
-      output = ".mdformat.toml";
-      format = "toml";
-      commands = [{ package = nixpkgs.python310Packages.mdformat; }];
+      output = ".prettierrc";
+      format = "json";
+      commands = [{ package = nixpkgs.nodePackages.prettier; }];
+    };
+  treefmt = std.std.nixago.treefmt
+    {
+      configData = {
+        formatter = {
+          nix = {
+            command = "nixpkgs-fmt";
+            includes = [ "*.nix" ];
+          };
+          prettier = {
+            command = "prettier";
+            options = [ "--write" ];
+            includes = [
+              "*.md"
+            ];
+          };
+        };
+      };
     };
 }
