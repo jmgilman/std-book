@@ -1,0 +1,116 @@
+# Flake
+
+The starting point for integrating std with our example project is defining a
+flake.nix file at the root of our repository. As mentioned previously, `std` is
+a _flake-based_ framework, and usage of Nix flakes is not optional.
+
+Throughout this book, we'll be sharing snippets of our growing integration.
+These snippets will make excessive use of localized comments to explain
+concepts, as the proximity of these tends to make explanations much more
+effective. As our code base grows, repeat code will have comments stripped and
+only the new additions will be commented.
+
+## Our `std` Flake
+
+```nix
+{
+  # Like any flake, we define a set of inputs that should be accessible to our
+  # project. Here, we include the `std` library and the latest version of
+  # nixpkgs.
+  inputs.std.url = "github:divnix/std";
+  inputs.nixpkgs.url = "nixpkgs";
+
+  # As per the flake schema, we define an attribute for holding the outputs of
+  # our flake. In this case, `std` will be responsible for managing the outputs.
+  outputs = { std, ... } @ inputs:
+    # The `growOn` function can be seen as the main entrypoint into `std`. It is
+    # responsible for growing our "organism" through cells into the final
+    # product. It will produce an output schema that is specific to `std` and
+    # can be further explored through the `std` CLI/TUI.
+    #
+    # The `growOn` function is similar to `grow` but allows us to expand our
+    # flake outputs to include more than just what `std` generates by default.
+    # It takes a variable number of attribute sets after the first one which
+    # defines how it behaves and will recursively update them into one final
+    # set. Without this, we would only be able to use the `std` CLI/TUI, as by
+    # default `std` places outputs under the `__std` attribute which the nix CLI
+    # knows nothing about.
+    std.growOn
+      {
+        # Necessary for `std` to perform its magic.
+        inherit inputs;
+
+        # This is one of the most important arguments for the `grow` function.
+        # It defines the path where `std` will search for our cells. In this
+        # case, we're specifying the `nix` subdirectory. A cell, in this case,
+        # would be defined in a subdirectory under `nix` (i.e. ./nix/cell).
+        cellsFrom = ./nix;
+
+        # This is the second most important argument for the `grow` function. It
+        # informs `std` of the block types that exist within our cells and where
+        # they can be found. In this case, we're specifying that we have
+        # "runnable" block types that can be found in an `apps.nix` file under
+        # the cell directory.
+        #
+        # The `std` framework has many different block types, and they primarily
+        # dictate how the `std` CLI/TUI will behave. For example, the `runnable`
+        # type will allow us to run our cell block as an executable using:
+        #
+        # > std //std-example/apps/default:run
+        #
+        # The `run` action is available because we've specified the `runnable`
+        # cell block type. In this case, we're running the `default` target
+        # which is defined as a derivation in ./nix/std-example/apps.nix that
+        # builds our binary.
+        cellBlocks = [
+          (std.blockTypes.runnables "apps")
+        ];
+      }
+      # This second argument, as described above, allows us to expand what gets
+      # included in our flake output. In this case, we're using the built-in
+      # `harvest` function to "harvest" the derivations from our apps cell
+      # block into the `packages` attribute of our flake output. This allows us
+      # to interact with our flake using the nix CLI. For example, we can run
+      #
+      # > nix run .#default
+      #
+      # Which will build and run our binary.
+      {
+        packages = std.harvest inputs.self [ [ "example" "apps" ] ];
+      };
+}
+```
+
+Much of the structure presented above should not be surprising as there is no
+major deviation from the [expected flake schema][flake-schema]. Perhaps the
+largest change occurs in that this structure is primarily generateed by `std`
+through the [`grow-on` function][grow-on]. The arguments to this function are
+where we primarily derive the structure we discussed in the [previous
+chapter][prev]. Of note are the following:
+
+- `cellsFrom`: The cells that make up our _organism_ must be defined in a single
+  folder within our repository. It's idiomatic to name this folder either
+  `cells` or `nix`. Within this directory, each cell is isolated into a
+  subdirectory, with all of its cell blocks further nested under this
+  subdirectory.
+- `cellBlock`: Each cell consists of one or more blocks which are defined here
+  in list form. Recall that cell blocks are _typed_, and the general format for
+  defining them is `(std.blockTypes.<type> "<name>")`; where `<type>` is a valid
+  block type as [defined here][block-types] and `<name>` is where `std` should
+  look for the cell block under the parent cell's folder.
+
+With these two arguments we are able to bring cohesion to our otherwise
+disunified Nix code. We know where cells are defined, what block types are
+available, and where to find them. Determining where our _runnables_ exist is
+simply a matter of examining our `flake.nix` and following the paths
+accordingly.
+
+The `growOn` function takes a variadic number of additional arguments and is
+what differentiates it from its [sibling function][grow] (`grow`). We will dive
+deeper into these additional arguments in a future chapter.
+
+[block-types]: https://github.com/divnix/std/tree/main/src/blocktypes
+[flake-schema]: https://nixos.wiki/wiki/Flakes#Flake_schema
+[grow]: https://github.com/divnix/std/blob/main/src/grow.nix
+[grow-on]: https://github.com/divnix/std/blob/main/src/grow-on.nix
+[prev]: introduction.md
