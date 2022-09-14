@@ -12,3 +12,6 @@
   - [Adding a Devshell Block](devshells/devshell_block.md)
   - [Integrating direnv](devshells/direnv.md)
   - [Review](devshells/review.md)
+- [Managing Configurations](configs/introduction.md)
+  - [Adding a Nixago Block](configs/nixago_block.md)
+  - [Review](configs/review.md)
