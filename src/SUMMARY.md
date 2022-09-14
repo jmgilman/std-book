@@ -8,3 +8,7 @@
   - [Growing](getting_started/growing.md)
   - [The `std` TUI](getting_started/std_tui.md)
   - [Review](getting_started/review.md)
+- [Managing Devshells](devshells/introduction.md)
+  - [Adding a Devshell Block](devshells/devshell_block.md)
+  - [Integrating direnv](devshells/direnv.md)
+  - [Review](devshells/review.md)
