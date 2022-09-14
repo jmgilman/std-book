@@ -25,6 +25,6 @@ can be [found here][src].
 
 [nix]: https://nixos.org
 [prj-src]: https://github.com/jmgilman/std-book/tree/master/rust
-[src]: https://github.com/jmgilman/std-book/tree/master/final
+[src]: https://github.com/jmgilman/std-book-example
 [std]: https://github.com/divnix/std
 [std-docs]: https://divnix.github.io/std/
