@@ -76,7 +76,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="overview.html">Overview</a></li><li class="chapter-item expanded "><a href="getting_started/introduction.html"><strong aria-hidden="true">1.</strong> Getting Started</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="getting_started/flake.html"><strong aria-hidden="true">1.1.</strong> A std Flake</a></li><li class="chapter-item expanded "><a href="getting_started/first_block.html"><strong aria-hidden="true">1.2.</strong> Our First Cell Block</a></li><li class="chapter-item expanded "><a href="getting_started/growing.html"><strong aria-hidden="true">1.3.</strong> Growing</a></li><li class="chapter-item expanded "><a href="getting_started/std_tui.html"><strong aria-hidden="true">1.4.</strong> The std TUI</a></li><li class="chapter-item expanded "><a href="getting_started/review.html"><strong aria-hidden="true">1.5.</strong> Review</a></li></ol></li><li class="chapter-item expanded "><a href="devshells/introduction.html"><strong aria-hidden="true">2.</strong> Managing Devshells</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="devshells/devshell_block.html"><strong aria-hidden="true">2.1.</strong> Adding a Devshell Block</a></li><li class="chapter-item expanded "><a href="devshells/direnv.html"><strong aria-hidden="true">2.2.</strong> Integrating direnv</a></li><li class="chapter-item expanded "><a href="devshells/review.html"><strong aria-hidden="true">2.3.</strong> Review</a></li></ol></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="overview.html">Overview</a></li><li class="chapter-item expanded "><a href="getting_started/introduction.html"><strong aria-hidden="true">1.</strong> Getting Started</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="getting_started/flake.html"><strong aria-hidden="true">1.1.</strong> A std Flake</a></li><li class="chapter-item expanded "><a href="getting_started/first_block.html"><strong aria-hidden="true">1.2.</strong> Our First Cell Block</a></li><li class="chapter-item expanded "><a href="getting_started/growing.html"><strong aria-hidden="true">1.3.</strong> Growing</a></li><li class="chapter-item expanded "><a href="getting_started/std_tui.html"><strong aria-hidden="true">1.4.</strong> The std TUI</a></li><li class="chapter-item expanded "><a href="getting_started/review.html"><strong aria-hidden="true">1.5.</strong> Review</a></li></ol></li><li class="chapter-item expanded "><a href="devshells/introduction.html"><strong aria-hidden="true">2.</strong> Managing Devshells</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="devshells/devshell_block.html"><strong aria-hidden="true">2.1.</strong> Adding a Devshell Block</a></li><li class="chapter-item expanded "><a href="devshells/direnv.html"><strong aria-hidden="true">2.2.</strong> Integrating direnv</a></li><li class="chapter-item expanded "><a href="devshells/review.html"><strong aria-hidden="true">2.3.</strong> Review</a></li></ol></li><li class="chapter-item expanded "><a href="configs/introduction.html"><strong aria-hidden="true">3.</strong> Managing Configurations</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="configs/nixago_block.html"><strong aria-hidden="true">3.1.</strong> Adding a Nixago Block</a></li><li class="chapter-item expanded "><a href="configs/review.html"><strong aria-hidden="true">3.2.</strong> Review</a></li></ol></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -867,8 +867,8 @@ test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
 <ul>
 <li>Took advantage of <code>std</code>'s integration with <code>numtide/devshell</code> and added a
 default development shell to our repository</li>
-<li>Created a nice MOTD for our repository, welcoming contributors and making
-them aware of <code>std</code> and our custom commands</li>
+<li>Created a nice MOTD for our repository, welcoming contributors and making them
+aware of <code>std</code> and our custom commands</li>
 <li>Added a custom command for running our tests with <code>cargo</code></li>
 <li>Provided contributors with the latest version of the Rust toolchain</li>
 </ul>
@@ -880,6 +880,361 @@ were still afforded all of these quality-of-life improvements.</p>
 but so are the quality-of-life improvements. Contributing to our humble example
 project just became much easier with development shells, and we'll continue this
 theme of improvement in the next chapter.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="managing-configurations"><a class="header" href="#managing-configurations">Managing Configurations</a></h1>
+<p>In the last chapter, we saw how the integration that <code>std</code> has with
+<code>numtide/devshell</code> allows us to easily integrate feature-rich development
+environments into our repository. These allow contributors to quickly get up to
+speed with the tools that are required to contribute to our repository and
+provide a lot towards solving the &quot;works on my machine&quot; problem.</p>
+<p>In this chapter, we're going to look at another integration that <code>std</code> has, this
+time with <a href="https://github.com/nix-community/nixago">Nixago</a>.</p>
+<h2 id="an-introduction-to-nixago"><a class="header" href="#an-introduction-to-nixago">An Introduction to Nixago</a></h2>
+<p>Modern repositories rely on a lot of modern tools for providing things like
+linting, auditing, formatting, compiling, releasing, and the list goes on.
+Sometimes one tool can tackle multiple tasks, but for the most part we often end
+up needing several to cover the whole spectrum. To make matters worse, many of
+these tools bring with them their own configuration with little room for
+interoperability between them.</p>
+<p>Nixago was designed to address this problem by doing two things:</p>
+<ol>
+<li>Bringing configuration definitions back into Nix</li>
+<li>Dynamically generating configuration files</li>
+</ol>
+<h3 id="managing-configurations-with-nix"><a class="header" href="#managing-configurations-with-nix">Managing Configurations with Nix</a></h3>
+<p>The first benefit that Nixago brings is it allows us to generate our
+configuration files using pure Nix code. This allows us to do many interesting
+things, especially when our entire repository is already wired up by Nix using
+<code>std</code>.</p>
+<p>For example, we can apply convenient transformations to data structures or bring
+in data from other parts of the repository to inform how a specific tool should
+be configured. For example, the <code>std</code> <a href="https://github.com/divnix/std/blob/main/cells/std/nixago/conform.nix">integration</a> for
+<a href="https://github.com/siderolabs/conform">conform</a> automatically informs the conventional commit policie of the cell
+names to use as subjects. This is just one example of many possibilities that
+can be put together using <code>std</code>'s Nixago integration.</p>
+<h3 id="dynamic-generation"><a class="header" href="#dynamic-generation">Dynamic Generation</a></h3>
+<p>The second benefit that Nixago brings is that configuration files are
+dynamically generated. When a user first enters into a development shell that
+has been configured with Nixago support, it will automatically run its
+pre-generated shell hooks which will generate the required configuration files
+and write them to the repository directory. Most times, these files are simply
+symlinks that point back to the Nix store (and automatically added to
+<code>.gitignore</code>). However, an option can be specified which switches these to hard
+copies which can then be committed into revision control (to support CI for
+example).</p>
+<h2 id="integration"><a class="header" href="#integration">Integration</a></h2>
+<p>The <code>std</code> framework makes it easy to integrate Nixago into our repository. It
+provides a <a href="https://github.com/divnix/std/blob/main/src/blocktypes/nixago.nix">cell block type</a> which provides direct integration
+with the devshell cell block. This is required, because Nixago relies on shell
+hooks to generate files, and the devshell integration will ensure the hooks are
+run when we enter the environment.</p>
+<p>In the remainder of this chapter, we'll work on setting up the Nixago
+integration to configure a few common tools that will prove useful to our
+development.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="adding-a-nixago-block"><a class="header" href="#adding-a-nixago-block">Adding a Nixago Block</a></h1>
+<p>As with any cell block, we'll first add it to our <code>flake.nix</code>:</p>
+<pre><code class="language-nix">{
+  inputs.std.url = &quot;github:divnix/std&quot;;
+  inputs.nixpkgs.url = &quot;nixpkgs&quot;;
+  inputs.rust-overlay.url = &quot;github:oxalica/rust-overlay&quot;;
+
+  outputs = { std, ... } @ inputs:
+    std.growOn
+      {
+        inherit inputs;
+        cellsFrom = ./nix;
+        cellBlocks = [
+          (std.blockTypes.runnables &quot;apps&quot;)
+          (std.blockTypes.devshells &quot;devshells&quot;)
+          (std.blockTypes.functions &quot;toolchain&quot;)
+
+          # The `nixago` type is used for holding Nixago configurations. We name
+          # it configs to remove some ambuiguity.
+          (std.blockTypes.nixago &quot;configs&quot;)
+        ];
+      }
+      {
+        packages = std.harvest inputs.self [ [ &quot;example&quot; &quot;apps&quot; ] ];
+        devShells = std.harvest inputs.self [ &quot;example&quot; &quot;devshells&quot; ];
+      };
+}
+</code></pre>
+<p>This is a fairly trivial addition, the only thing worth noting is that we call
+it <code>configs</code> to reduce ambiguity because most people are not aware of the Nixago
+flake.</p>
+<h2 id="defining-the-block"><a class="header" href="#defining-the-block">Defining the Block</a></h2>
+<p>The cell block is where the meat of our configuration lies. We'll add the
+following to <code>/cells/example/configs.nix</code>:</p>
+<pre><code class="language-nix"># This cell block holds our Nixago expressions for generating configuration
+# files for the various tools we want to configure in our repository. We title
+# it `configs.nix` because Nixago is less well-known and this name points to the
+# purpose of the cell block.
+#
+# For an introduction to Nixago, see here:
+# https://nix-community.github.io/nixago/
+{ inputs
+, cell
+}:
+let
+  inherit (inputs) nixpkgs std;
+  l = nixpkgs.lib // builtins;
+in
+# The structure is an attribute set where the value is an attribute set that
+  # is ultimately passed to the `make`[1] function from Nixago. The available
+  # arguments for the `make` function can be seen here[2].
+  #
+  # `std` allows us to pass additional pass-through arguments that can influence
+  # the behavior of our development shells. This is primarily used so we can
+  # include the necessary packages for the tools we want to configure into the
+  # development environment.
+  #
+  # Additionally, `std` automatically includes any shell hooks generated by Nixago
+  # into the appropriate `devshell` option. This is ultimately what allows Nixago
+  # to generate the configurations when we enter the development shell.
+  #
+  # [1]: https://github.com/nix-community/nixago/blob/master/lib/make.nix
+  # [2]: https://github.com/nix-community/nixago/blob/master/modules/request.nix
+{
+  # The `std` framework ships with some &quot;pre-configured&quot; services that we can
+  # import and use here. For a list of all of them, see here[1]. These are setup
+  # such that we can use a functor to dynamically extend them with additional
+  # attributes or overrides. This is why they appear to look like functions.
+  #
+  # In most cases, when using these pre-configured services, we only need to be
+  # concerned with setting the `configData` attribute. This is what ultimately
+  # ends up in the generated configuration file and is dependent on what tool
+  # is being configured.
+  #
+  # Conform[2] is a tool that allows us to enforce policies on our commit
+  # messages. We configure it here to only allow commits that follow the
+  # Conventional Commits specification[3].
+  #
+  # [1]: https://github.com/divnix/std/tree/main/cells/std/nixago
+  # [2]: https://github.com/siderolabs/conform
+  # [3]: https://www.conventionalcommits.org/en/v1.0.0/
+  conform = std.std.nixago.conform {
+    # The configuration of Conform is a bit different than the expected file
+    # format. This is to prevent excessive nested attribute sets. In this case,
+    # we only need to specify either a `commit` or `license` parent attribute
+    # and then the child contents match what is specified in the Conform README.
+    configData = {
+      commit = {
+        header = { length = 89; };
+        conventional = {
+          # Only allow these types of conventional commits (inspired by Angular)
+          types = [
+            &quot;build&quot;
+            &quot;chore&quot;
+            &quot;ci&quot;
+            &quot;docs&quot;
+            &quot;feat&quot;
+            &quot;fix&quot;
+            &quot;perf&quot;
+            &quot;refactor&quot;
+            &quot;style&quot;
+            &quot;test&quot;
+          ];
+        };
+      };
+    };
+  };
+  # Lefthook is a pre-commit hook manager.
+  lefthook = std.std.nixago.lefthook {
+    configData = {
+      commit-msg = {
+        commands = {
+          # Runs conform on commit-msg hook to ensure commit messages are
+          # compliant.
+          conform = {
+            run = &quot;${nixpkgs.conform}/bin/conform enforce --commit-msg-file {1}&quot;;
+          };
+        };
+      };
+      pre-commit = {
+        commands = {
+          # Runs treefmt on pre-commit hook to ensure checked-in source code is
+          # properly formatted.
+          treefmt = {
+            run = &quot;${nixpkgs.treefmt}/bin/treefmt {staged_files}&quot;;
+          };
+        };
+      };
+    };
+  };
+  # Prettier is a multi-language code formatter.
+  prettier = std.std.lib.mkNixago {
+    # We mainly use it here to format the Markdown in our README.
+    configData = {
+      printWidth = 80;
+      proseWrap = &quot;always&quot;;
+    };
+    output = &quot;.prettierrc&quot;;
+    format = &quot;json&quot;;
+  };
+  # Treefmt is an aggregator for source code formatters. Our codebase has
+  # markdown, Nix, and Rust, so we configure a formatter for each.
+  treefmt = std.std.nixago.treefmt {
+    configData = {
+      formatter = {
+        nix = {
+          command = &quot;nixpkgs-fmt&quot;;
+          includes = [ &quot;*.nix&quot; ];
+        };
+        prettier = {
+          command = &quot;prettier&quot;;
+          options = [ &quot;--write&quot; ];
+          includes = [ &quot;*.md&quot; ];
+        };
+        rustfmt = {
+          command = &quot;rustfmt&quot;;
+          options = [ &quot;--edition&quot; &quot;2021&quot; ];
+          includes = [ &quot;*.rs&quot; ];
+        };
+      };
+    };
+    # This is the pass-through feature where we can pass attributes to devshell.
+    # In this case, we're asking devshell to include the `nixpkgs-fmt` and
+    # `prettier` packages in the development environment. The `rustfmt` package
+    # is already included within the Rust toolchain (see toolchain.nix).
+    packages = [
+      nixpkgs.nixpkgs-fmt
+      nixpkgs.nodePackages.prettier
+    ];
+  };
+}
+</code></pre>
+<p>This is significantly more code, but a majority of it is the actual
+configuration data we're using to generate our files. The output structure of
+the cell block is an attribute set where the value is another attribute set that
+must conform to two things:</p>
+<ol>
+<li>The <a href="https://github.com/nix-community/nixago/blob/master/modules/request.nix">module structure</a> enforced by Nixago</li>
+<li>Any additional pass-through data, which in this case means data intended for
+<code>devshell</code></li>
+</ol>
+<h3 id="module-structure"><a class="header" href="#module-structure">Module Structure</a></h3>
+<p>The module structure is fairly easy to grasp and a quick overview can be seen in
+the <a href="https://nix-community.github.io/nixago/quick_start.html">Nixago quick start guide</a>. The three main options are:</p>
+<ol>
+<li><code>configData</code>: The raw configuration data used to generate the output file</li>
+<li><code>output</code>: The name of the output file</li>
+<li><code>format</code>: The format of the output file</li>
+</ol>
+<p>Advanced users can specify additional commands to run in shell hooks or change
+the engine to something more advanced (i.e. CUE). The above three options are
+enough to cover a majority of use cases.</p>
+<p>The <code>std</code> framework provides several &quot;pre-configured&quot; expressions that we can
+make use of to lessen the verbosity of our cell block. These expressions can be
+<a href="https://github.com/divnix/std/tree/main/cells/std/nixago">found here</a>. Attentive readers will notice that it appears we are
+&quot;calling&quot; these expressions as if they were functions. This is because they use
+<a href="https://github.com/NixOS/nixpkgs/issues/11233">functors</a> to allow dynamically merging/overriding the arguments passed to them.
+So in many of the examples seen in our code, we're essentially extending the
+existing structure given to us by <code>std</code> and adding our raw configuration data to
+it. It's not strictly necessary to do this, we could just define the whole
+structure ourselves, but using these shortcuts helps us type a bit less.</p>
+<h3 id="pass-through"><a class="header" href="#pass-through">Pass-Through</a></h3>
+<p>To get our Nixago configurations to generate, we must pass off the shell hooks
+to <code>devshell</code>. We'll tackle this part soon, but the important thing to
+understand is that these data structures will eventually pass through to
+<code>devshell</code>. What this means is that we can add additional attributes to our data
+structure that will in turn provide additional configuration to <code>devshell</code>.</p>
+<p>If you examine the <code>treefmt</code> configuration in our example, you'll see that it
+also includes the <code>packages</code> attribute which is not a part of the Nixago module
+structure. Nixago will ignore this attribute, but when <code>devshell</code> sees it, it
+will automatically include those packages in our environment. This allows us to
+define our dependency as close to our configuration as possible while also
+ensuring our configuration works as expected (i.e. <code>treefmt</code> needs <code>prettier</code> to
+work as expected).</p>
+<h2 id="the-tools"><a class="header" href="#the-tools">The Tools</a></h2>
+<p>The remainder of the code is responsible for configuring the actual tools we'll
+be using. Each of these will be briefly discussed below.</p>
+<h3 id="conform"><a class="header" href="#conform">Conform</a></h3>
+<p>The <a href="https://github.com/siderolabs/conform">conform</a> tool allows us to specify policies that will be enforced against
+our commits. This is an invaluable tool in open-source projects and can help
+bring uniformity to commit messages and can improve the generation of change
+logs.</p>
+<p>In our case, we're specifying that commit message headers can be no longer than
+89 characters and that the message itself must conform (ha!) to the
+<a href="https://www.conventionalcommits.org/en/v1.0.0/">conventional commit specification</a>. Additionally, the <em>type</em> section of the
+conventional commit header must be one of the items given in the list (the list
+itself is inspired by the <a href="https://docs.google.com/document/d/1QrDFcIiPjSLDn3EL15IJygNPiHORgU1_OOAqWjiDU5Y/edit">Angular project</a>).</p>
+<h3 id="lefthook"><a class="header" href="#lefthook">Lefthook</a></h3>
+<p>The <a href="https://github.com/evilmartians/lefthook">lefthook</a> tool automatically manages <a href="https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks">git hooks</a> for us. These
+are often referred to as pre-commit hooks and have been a best practice in many
+projects for reducing the feedback cycle when developing against a project.</p>
+<p>In our case, we use <code>lefthook</code> to enforce our commit messages using the policy
+specified with <code>conform</code>. Additionally, we automatically call <code>treefmt</code> on the
+files being checked in to ensure that all of our revision-controlled source code
+is properly formatted.</p>
+<h3 id="prettier"><a class="header" href="#prettier">Prettier</a></h3>
+<p>The <a href="https://prettier.io">prettier</a> tool is a general-purpose code formatter that supports several
+languages.</p>
+<p>In our case, we're simply using it to format our markdown files. The primary
+benefit is that it can help enforce the 80-character line limit being imposed
+across all of our code.</p>
+<h3 id="treefmt"><a class="header" href="#treefmt">Treefmt</a></h3>
+<p>The <a href="https://github.com/numtide/treefmt">treefmt</a> tool acts as an aggregator for code formatters. Instead of having
+to call each formatter individually, we instruct <code>treefmt</code> which formatters we
+want to run on which types of files and it will handle the rest for us.</p>
+<p>In our case, we're adding formatters for the three primary languages that exist
+in our repository: Rust, Nix, and Markdown.</p>
+<h2 id="devshell-integration"><a class="header" href="#devshell-integration">Devshell Integration</a></h2>
+<p>As mentioned earlier, the last thing we need to do is to inform our <code>devshell</code>
+configuration about our newly added Nixago configurations. We'll add the
+following to our <code>/nix/example/devshells.nix</code> file:</p>
+<pre><code class="language-nix">{ inputs
+, cell
+}:
+let
+  inherit (inputs) nixpkgs std;
+  l = nixpkgs.lib // builtins;
+in
+l.mapAttrs (_: std.std.lib.mkShell) {
+  default = { ... }: {
+    # ...
+
+    # Nixago uses shell hooks for generating configuration files. In order for
+    # that to work, devshell must add them to its own configuration. To ensure
+    # this happens, we specify the configurations we would like generated using
+    # the `nixago` attribute.
+    nixago = [
+      cell.configs.conform
+      cell.configs.lefthook
+      cell.configs.prettier
+      cell.configs.treefmt
+    ];
+
+    # ...
+  };
+}
+</code></pre>
+<p>With this complete, we can now reload our development shell and watch Nixago
+generate all of our configuration files for us:</p>
+<pre><code class="language-text">$ direnv reload
+# ...
+nixago: updating repositoriy files
+nixago: '.conform.yaml' link updated
+nixago: '.conform.yaml' added to .gitignore
+nixago: 'lefthook.yaml' link updated
+nixago: 'lefthook.yaml' added to .gitignore
+nixago: '.prettierrc' link updated
+nixago: '.prettierrc' added to .gitignore
+nixago: 'treefmt.toml' link updated
+nixago: 'treefmt.toml' added to .gitignore
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="review-2"><a class="header" href="#review-2">Review</a></h1>
+<p>Many of the improvements we have gained in this chapter have come from the tools
+we've now employed to improve our overall development experience; however, don't
+miss how easy it was to automatically have these tools:</p>
+<ol>
+<li>Dynamically configured using Nix</li>
+<li>Configuration files managed by Nixago.</li>
+<li>Binaries automatically included in the shell environment</li>
+</ol>
+<p>The integration between <code>std</code>, Nixago, and <code>devshell</code> has afforded us a great
+degree of flexibility for bringing in and configuring tools that will help
+improve our experience. The organizational model provided by <code>std</code> serves as the
+glue that binds these all together and allows our repository to continue to add
+useful tools without the risk of becoming too hard to maintain or reproduce.</p>
 
                     </main>
 
