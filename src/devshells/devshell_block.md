@@ -1,9 +1,9 @@
 # Adding the Devshell Block
 
-As we begin iterating on our project, we'll come across this common idiom: to
-add new functionality to our project, simply add new blocks. In the case of
-`devshell`, this remains true: to begin, we'll need to add a new cell block to
-our `flake.nix`:
+As we begin iterating on our project, we'll come across this common theme: to
+add new functionality to our project, simply add new cell blocks. In the case of
+`devshell`, this remains true: to begin, we'll add a new block to our
+`flake.nix`:
 
 ```nix
 {

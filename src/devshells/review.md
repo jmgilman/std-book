@@ -2,12 +2,12 @@
 
 Let's take stock of what we've been afforded with these changes.
 
-- Took advantage of `std`'s integration with `numtide/devshell` and added a
+- We took advantage of `std`'s integration with `numtide/devshell` and added a
   default development shell to our repository
-- Created a nice MOTD for our repository, welcoming contributors and making them
+- We created a nice MOTD for our repository, welcoming contributors and making them
   aware of `std` and our custom commands
-- Added a custom command for running our tests with `cargo`
-- Provided contributors with the latest version of the Rust toolchain
+- We added a custom command for running our tests with `cargo`
+- We provided contributors with the latest version of the Rust toolchain
 
 Finally, to wrap things with a bow, we integrated `direnv` to automagically load
 us into our new development shell when we `cd` into our repository root. This is

@@ -81,7 +81,5 @@ test test_say_hello ... ok
 test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 ```
 
-It worked!
-
 [direnv]: https://direnv.net
 [nix-direnv]: https://github.com/nix-community/nix-direnv

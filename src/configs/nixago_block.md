@@ -31,8 +31,8 @@ As with any cell block, we'll first add it to our `flake.nix`:
 ```
 
 This is a fairly trivial addition, the only thing worth noting is that we call
-it `configs` to reduce ambiguity because most people are not aware of the Nixago
-flake.
+it `configs` to reduce ambiguity because most people are not aware of what Nixago
+does.
 
 ## Defining the Block
 
@@ -180,7 +180,9 @@ in
 ```
 
 This is significantly more code, but a majority of it is the actual
-configuration data we're using to generate our files. The output structure of
+configuration data we're using to generate our files.
+
+The output structure of
 the cell block is an attribute set where the value is another attribute set that
 must conform to two things:
 
@@ -197,8 +199,7 @@ the [Nixago quick start guide][nixago-quick]. The three main options are:
 2. `output`: The name of the output file
 3. `format`: The format of the output file
 
-Advanced users can specify additional commands to run in shell hooks or change
-the engine to something more advanced (i.e. CUE). The above three options are
+There are a few additional advanced options, but the above three options are
 enough to cover a majority of use cases.
 
 The `std` framework provides several "pre-configured" expressions that we can
@@ -236,7 +237,7 @@ be using. Each of these will be briefly discussed below.
 
 The [conform] tool allows us to specify policies that will be enforced against
 our commits. This is an invaluable tool in open-source projects and can help
-bring uniformity to commit messages and can improve the generation of change
+bring uniformity to commit messages and improve the generation of change
 logs.
 
 In our case, we're specifying that commit message headers can be no longer than

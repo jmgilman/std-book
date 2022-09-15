@@ -1,4 +1,13 @@
 [book]
+authors = ["Joshua Gilman"]
+description = "The official book for the `std` framework."
 language = "en"
-multilingual = false
 title = "The Standard Book"
+
+[output.html]
+additional-js = ["theme/mermaid.min.js", "theme/mermaid-init.js"]
+edit-url-template = "https://github.com/jmgilman/std-book/edit/master/{path}"
+git-repository-url = "https://github.com/jmgilman/std-book"
+
+[preprocessor.mermaid]
+command = "mdbook-mermaid"

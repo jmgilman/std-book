@@ -69,10 +69,10 @@ in
 
 One of the major benefits of `std` can be seen in the first few lines of Nix
 code. As is fairly typical with Nix, the file serves as one large function;
-however, the significance of the argument structure can be easily overlooked,
-though. This structure can be viewed as the _standardized_ form of all cell
-blocks. From these two arguments, it's possible to derive _all_ values required
-to perform our required logic.
+however, the significance of the argument structure can be easily overlooked.
+This structure can be viewed as the _standardized_ form of all cell blocks. From
+these two arguments, it's possible to derive _all_ values required to perform
+our required logic.
 
 Again, this cannot be overstated: we define the arguments the same way each time
 and are guaranteed access to all of the tools and data required to perform our

@@ -5,7 +5,7 @@ we've now employed to improve our overall development experience; however, don't
 miss how easy it was to automatically have these tools:
 
 1. Dynamically configured using Nix
-2. Configuration files managed by Nixago.
+2. Configuration files automatically managed by Nixago.
 3. Binaries automatically included in the shell environment
 
 The integration between `std`, Nixago, and `devshell` has afforded us a great

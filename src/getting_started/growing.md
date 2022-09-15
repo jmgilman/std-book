@@ -20,10 +20,10 @@ git+file:///Users/josh/code/std-book-example
 └───x86_64-linux: unknown
 ```
 
-This looks strange at first; what is under \__std? This attribute is generated
-by the grow functions and is referred to as the \_registry_. It houses a
-plethora of information about our standardized environment, and you can inspect
-what's under here by running:
+This looks strange at first; what is under `__std`? This attribute is generated
+by the grow functions and is referred to as the _registry_. It houses a plethora
+of information about our standardized environment, and you can inspect what's
+under here by running:
 
 ```text
 nix eval --json .#__std | jq
@@ -35,10 +35,10 @@ types) of those cells, what actions we can run on the blocks, etc. The benefit
 here is that it provides a layer by which external tools can utilize the
 information gathered about our environment.
 
-What about all the unknowns? There is actually data here, but it's important to
-understand that it doesn't conform to the expected flake output schema, so nix
-flake show just marks it as "unknown." Again, we can see the structure by going
-into the Nix REPL environment:
+What about all the unknowns? There is data here, but it's important to
+understand that it doesn't conform to the expected flake output schema, so
+`nix flake show` just marks it as "unknown." Again, we can see the structure by
+going into the Nix REPL environment:
 
 ```text
 $ nix repl
@@ -61,8 +61,8 @@ Hello, world!
 However, this isn't very intuitive, and this is why the `growOn` function
 becomes helpful. It allows us to add a compatibility layer by transforming the
 above structure into something that the Nix CLI can more easily understand. In
-our case, if we run the same nix flake show command with the `growOn` function,
-we see:
+our case, if we run the same `nix flake show` command with the `growOn`
+function, we see:
 
 ```text
 $ nix flake show

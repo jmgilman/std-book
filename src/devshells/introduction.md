@@ -2,7 +2,7 @@
 
 In the remaining chapters of this book, we're going to begin improving the
 foundation we laid in the previous chapter. We've already gained a lot by
-integrating `std` into our example Rust project, but there remains much more
+integrating `std` into our example Rust project, but there remains significant
 room for improvement.
 
 So far, we've seen that `std` has a lot to offer in terms of bringing
@@ -53,9 +53,9 @@ summarized as follows:
   can include custom commands or other binaries that are available in the
   environment.
 - Package management: package management is made significantly easier by
-  allowing specifying packages in several different locations. For example, a
-  custom command could be dependent on a package being available and `devshell`
-  will handle the dependency for you automatically.
+  allowing packages to be specified in several different locations. For example,
+  a custom command could be dependent on a package being available in the
+  environment and `devshell` will handle the dependency for you automatically.
 
 The `std` framework provides native support for integrating `devshell` into our
 standardized project. All that's required is a little bit of configuration on

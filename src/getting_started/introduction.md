@@ -3,9 +3,9 @@
 The [`std`][std] (short for standard) framework is an opinionated [Nix]
 [flakes][nix-flake] framework that aims to solve the problem of complexity that
 often arises in large Nix-based projects. It's opinionated because it prescribes
-a standard, flake-based structure for repositories using Nix. As with most
-frameworks with this characteristic, it eliminates the question of **how** Nix
-code should be organized, ultimately serving as a boon for productivity.
+a standard, flake-based structure for repositories using Nix. It eliminates the
+question of _how_ Nix code should be organized and ultimately serves as a boon
+for productivity.
 
 In this chapter, we will briefly introduce the framework as a whole. As a
 reminder, this book will be starting off with an [example Rust project][prj-src]
@@ -22,20 +22,39 @@ contains a single unit test that confirms the above logic works as expected.
 
 `std` aims to provide a rigid framework for organizing Nix code in a repository.
 Why is this even necessary? The primary reason is that, because Nix can more or
-less do anything, it follows that by nature, it tends to become progressively
-less organized the more lines of it you add to your repository. While flakes
-helped to bring some organization to the entry point of a Nix environment, it
-also disrupted it in other ways (i.e., what to do with `system`). In the case of
-a monorepo, this nature can quickly become crippling and can result in all sorts
-of unique "frameworks" being developed by each team to address it.
+less do anything, it tends to become progressively less organized the more lines
+of it you add to your repository. While flakes helped to bring some organization
+to the entry point of a Nix environment, it also disrupted it in other ways
+(i.e., what to do with `system`). In the case of a monorepo, this nature can
+quickly become crippling and often results in all sorts of unique "frameworks"
+being developed by each team to address it.
 
 For these reasons, `std` was developed to help reign in large Nix codebases.
 However, it's not only for large projects. As we'll see in this article, it can
-be used in projects of any size and naturally grows along with them. Indeed,
+be used in projects of any size and will naturally grow along with them. Indeed,
 this is the preferred approach because it tackles the complexity before it has a
 chance to grow too unwieldy.
 
 ## Std Organization
+
+```mermaid
+%%{ init : { "flowchart" : { "curve" : "linear" }}}%%
+
+flowchart TD
+    repository(Repository)
+    cell1(Cell)
+    cell2(Cell)
+    cellblock1(Cell Block)
+    cellblock2(Cell Block)
+    cellblock3(Cell Block)
+    cellblock4(Cell Block)
+    repository --> cell1
+    repository --> cell2
+    cell1 --> cellblock1
+    cell1 --> cellblock2
+    cell2 --> cellblock3
+    cell2 --> cellblock4
+```
 
 The `std` framework is broken up into three organizational levels:
 
