@@ -4,8 +4,8 @@ Let's take stock of what we've been afforded with these changes.
 
 - We took advantage of `std`'s integration with `numtide/devshell` and added a
   default development shell to our repository
-- We created a nice MOTD for our repository, welcoming contributors and making them
-  aware of `std` and our custom commands
+- We created a nice MOTD for our repository, welcoming contributors and making
+  them aware of `std` and our custom commands
 - We added a custom command for running our tests with `cargo`
 - We provided contributors with the latest version of the Rust toolchain
 
