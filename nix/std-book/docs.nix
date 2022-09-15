@@ -12,6 +12,7 @@ in
     src = std.incl (inputs.self) [
       (inputs.self + /book.toml)
       (inputs.self + /src)
+      (inputs.self + /theme)
     ];
 
     buildInputs = [ mdbook ];
