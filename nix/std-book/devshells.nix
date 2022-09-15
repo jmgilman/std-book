@@ -9,6 +9,7 @@ l.mapAttrs (_: std.std.lib.mkShell) {
   default = { ... }: {
     name = "std-book devshell";
     nixago = [
+      cell.configs.cocogitto
       cell.configs.conform
       cell.configs.lefthook
       cell.configs.mdbook
