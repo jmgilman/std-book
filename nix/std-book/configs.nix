@@ -8,6 +8,7 @@ in
 {
   cocogitto = std.std.lib.mkNixago {
     configData = {
+      branch_whitelist = [ "master" ];
       changelog = {
         authors = [
           {
