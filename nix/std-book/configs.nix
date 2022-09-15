@@ -9,9 +9,14 @@ in
   mdbook = std.std.nixago.mdbook {
     configData = {
       book = {
+        title = "The Standard Book";
+        authors = [ "Joshua Gilman" ];
+        description = "The official book for the `std` framework.";
         language = "en";
-        multilingual = false;
-        title = "Documentation";
+      };
+      output.html = {
+        git-repository-url = "https://github.com/jmgilman/std-book";
+        edit-url-template = "https://github.com/jmgilman/std-book/edit/master/{path}";
       };
     };
   };
