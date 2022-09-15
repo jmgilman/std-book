@@ -15,7 +15,7 @@ in
       (inputs.self + /theme)
     ];
 
-    buildInputs = [ mdbook ];
+    buildInputs = [ mdbook mdbook-mermaid ];
     buildPhase = ''
       mdbook build
     '';
