@@ -6,11 +6,10 @@
         <title>Review - The Standard Book</title>
         <!-- Custom HTML head -->
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <meta name="description" content="">
+        <meta name="description" content="The official book for the &#x60;std&#x60; framework.">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff" />
 
-        <link rel="icon" href="../favicon.svg">
         <link rel="shortcut icon" href="../favicon.png">
         <link rel="stylesheet" href="../css/variables.css">
         <link rel="stylesheet" href="../css/general.css">
@@ -110,6 +109,12 @@
                         <a href="../print.html" title="Print this book" aria-label="Print this book">
                             <i id="print-button" class="fa fa-print"></i>
                         </a>
+                        <a href="https://github.com/jmgilman/std-book" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/jmgilman/std-book/edit/master/src/devshells/review.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
                     </div>
                 </div>
 
@@ -137,12 +142,12 @@
                         <h1 id="review"><a class="header" href="#review">Review</a></h1>
 <p>Let's take stock of what we've been afforded with these changes.</p>
 <ul>
-<li>Took advantage of <code>std</code>'s integration with <code>numtide/devshell</code> and added a
+<li>We took advantage of <code>std</code>'s integration with <code>numtide/devshell</code> and added a
 default development shell to our repository</li>
-<li>Created a nice MOTD for our repository, welcoming contributors and making them
-aware of <code>std</code> and our custom commands</li>
-<li>Added a custom command for running our tests with <code>cargo</code></li>
-<li>Provided contributors with the latest version of the Rust toolchain</li>
+<li>We created a nice MOTD for our repository, welcoming contributors and making
+them aware of <code>std</code> and our custom commands</li>
+<li>We added a custom command for running our tests with <code>cargo</code></li>
+<li>We provided contributors with the latest version of the Rust toolchain</li>
 </ul>
 <p>Finally, to wrap things with a bow, we integrated <code>direnv</code> to automagically load
 us into our new development shell when we <code>cd</code> into our repository root. This is
@@ -190,5 +195,7 @@ theme of improvement in the next chapter.</p>
         <script src="../book.js" type="text/javascript" charset="utf-8"></script>
 
         <!-- Custom JS scripts -->
+        <script type="text/javascript" src="../theme/mermaid.min.js"></script>
+        <script type="text/javascript" src="../theme/mermaid-init.js"></script>
     </body>
 </html>

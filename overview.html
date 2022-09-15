@@ -6,11 +6,10 @@
         <title>Overview - The Standard Book</title>
         <!-- Custom HTML head -->
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <meta name="description" content="">
+        <meta name="description" content="The official book for the &#x60;std&#x60; framework.">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff" />
 
-        <link rel="icon" href="favicon.svg">
         <link rel="shortcut icon" href="favicon.png">
         <link rel="stylesheet" href="css/variables.css">
         <link rel="stylesheet" href="css/general.css">
@@ -110,6 +109,12 @@
                         <a href="print.html" title="Print this book" aria-label="Print this book">
                             <i id="print-button" class="fa fa-print"></i>
                         </a>
+                        <a href="https://github.com/jmgilman/std-book" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/jmgilman/std-book/edit/master/src/overview.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
                     </div>
                 </div>
 
@@ -134,25 +139,37 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="overview"><a class="header" href="#overview">Overview</a></h1>
+                        <p><img src="images/logo.png" alt="std logo" /></p>
 <p>Welcome to the <a href="https://github.com/divnix/std"><code>std</code></a> book! This book is intended to serve as a companion
-to the <a href="https://divnix.github.io/std/"><code>std</code> documentation</a>. The primary difference between the two
-is that this book serves as a walk-through of configuring a <code>std</code> environment
-using an example Rust project. At the end of this book, you'll have a completely
-<code>std</code>ized project utilizing all of the main benefits offered by the <code>std</code>
+to the <a href="https://divnix.github.io/std/">documentation</a>. The primary difference between the two is that
+this book serves as a walk-through for configuring a <code>std</code> environment using an
+example Rust project. At the end of this book, you'll have a completely
+<em><code>std</code>ized</em> project utilizing all of the main benefits offered by the <code>std</code>
 framework.</p>
 <h2 id="how-this-book-is-organized"><a class="header" href="#how-this-book-is-organized">How this book is organized</a></h2>
-<p>This book is broken up into several chapters. Each chapter tackles a component
-of <code>std</code>, building on the work done in the previous chapters. As such, the book
-is intended to be read from start to finish; however, each chapter is written in
-a way that can still be useful as a quick reference.</p>
-<p>Since <code>std</code> is a <a href="https://nixos.org">Nix</a> framework intended to be used to organize code
+<p>This book is broken up into several chapters. Each chapter tackles a big idea
+from <code>std</code> while building on the work done in the previous chapters. As such,
+the book is intended to be read from start to finish; however, each chapter is
+written in a way that can still be useful as a quick reference.</p>
+<p>Since <code>std</code> is a <a href="https://nixos.org">Nix</a> framework and is intended to be used to organize code
 repositories, it makes sense to work through applying it to an example project.
 In this book, we're using a very basic Rust project, for which the source code
 can be <a href="https://github.com/jmgilman/std-book/tree/master/rust">found here</a>.</p>
-<p>Throughout the book, we'll be building out a <code>std</code> environment which uses the
-above example project. The final source code for the completed example project
-can be <a href="https://github.com/jmgilman/std-book-example">found here</a>.</p>
+<p>Throughout the book, we'll be building out an environment that uses the above
+example project. The final source code for the completed example project can be
+<a href="https://github.com/jmgilman/std-book-example">found here</a>.</p>
+<h2 id="assumptions"><a class="header" href="#assumptions">Assumptions</a></h2>
+<p>There are a few assumptions about the reader of this book:</p>
+<ol>
+<li>The reader is already familiar with <a href="https://nixos.org">Nix</a>. While all code snippets will be
+clearly explained, none of the explanations will be focused on language
+constructs.</li>
+<li>The reader has experience working with <a href="https://nixos.wiki/wiki/Flakes">Nix flakes</a>.</li>
+<li>The reader has general experience working within a code repository, including
+the common tasks and processes that occur within.</li>
+</ol>
+<p>It's worth noting that you <strong>do not</strong> need experience with the <a href="https://www.rust-lang.org">Rust
+language</a>. The usage of Rust is for example purposes only.</p>
 
                     </main>
 
@@ -185,5 +202,7 @@ can be <a href="https://github.com/jmgilman/std-book-example">found here</a>.</p
         <script src="book.js" type="text/javascript" charset="utf-8"></script>
 
         <!-- Custom JS scripts -->
+        <script type="text/javascript" src="theme/mermaid.min.js"></script>
+        <script type="text/javascript" src="theme/mermaid-init.js"></script>
     </body>
 </html>

@@ -7,11 +7,10 @@
         <meta name="robots" content="noindex" />
         <!-- Custom HTML head -->
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <meta name="description" content="">
+        <meta name="description" content="The official book for the &#x60;std&#x60; framework.">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff" />
 
-        <link rel="icon" href="favicon.svg">
         <link rel="shortcut icon" href="favicon.png">
         <link rel="stylesheet" href="css/variables.css">
         <link rel="stylesheet" href="css/general.css">
@@ -111,6 +110,9 @@
                         <a href="print.html" title="Print this book" aria-label="Print this book">
                             <i id="print-button" class="fa fa-print"></i>
                         </a>
+                        <a href="https://github.com/jmgilman/std-book" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
                     </div>
                 </div>
 
@@ -135,32 +137,44 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="overview"><a class="header" href="#overview">Overview</a></h1>
+                        <p><img src="images/logo.png" alt="std logo" /></p>
 <p>Welcome to the <a href="https://github.com/divnix/std"><code>std</code></a> book! This book is intended to serve as a companion
-to the <a href="https://divnix.github.io/std/"><code>std</code> documentation</a>. The primary difference between the two
-is that this book serves as a walk-through of configuring a <code>std</code> environment
-using an example Rust project. At the end of this book, you'll have a completely
-<code>std</code>ized project utilizing all of the main benefits offered by the <code>std</code>
+to the <a href="https://divnix.github.io/std/">documentation</a>. The primary difference between the two is that
+this book serves as a walk-through for configuring a <code>std</code> environment using an
+example Rust project. At the end of this book, you'll have a completely
+<em><code>std</code>ized</em> project utilizing all of the main benefits offered by the <code>std</code>
 framework.</p>
 <h2 id="how-this-book-is-organized"><a class="header" href="#how-this-book-is-organized">How this book is organized</a></h2>
-<p>This book is broken up into several chapters. Each chapter tackles a component
-of <code>std</code>, building on the work done in the previous chapters. As such, the book
-is intended to be read from start to finish; however, each chapter is written in
-a way that can still be useful as a quick reference.</p>
-<p>Since <code>std</code> is a <a href="https://nixos.org">Nix</a> framework intended to be used to organize code
+<p>This book is broken up into several chapters. Each chapter tackles a big idea
+from <code>std</code> while building on the work done in the previous chapters. As such,
+the book is intended to be read from start to finish; however, each chapter is
+written in a way that can still be useful as a quick reference.</p>
+<p>Since <code>std</code> is a <a href="https://nixos.org">Nix</a> framework and is intended to be used to organize code
 repositories, it makes sense to work through applying it to an example project.
 In this book, we're using a very basic Rust project, for which the source code
 can be <a href="https://github.com/jmgilman/std-book/tree/master/rust">found here</a>.</p>
-<p>Throughout the book, we'll be building out a <code>std</code> environment which uses the
-above example project. The final source code for the completed example project
-can be <a href="https://github.com/jmgilman/std-book-example">found here</a>.</p>
+<p>Throughout the book, we'll be building out an environment that uses the above
+example project. The final source code for the completed example project can be
+<a href="https://github.com/jmgilman/std-book-example">found here</a>.</p>
+<h2 id="assumptions"><a class="header" href="#assumptions">Assumptions</a></h2>
+<p>There are a few assumptions about the reader of this book:</p>
+<ol>
+<li>The reader is already familiar with <a href="https://nixos.org">Nix</a>. While all code snippets will be
+clearly explained, none of the explanations will be focused on language
+constructs.</li>
+<li>The reader has experience working with <a href="https://nixos.wiki/wiki/Flakes">Nix flakes</a>.</li>
+<li>The reader has general experience working within a code repository, including
+the common tasks and processes that occur within.</li>
+</ol>
+<p>It's worth noting that you <strong>do not</strong> need experience with the <a href="https://www.rust-lang.org">Rust
+language</a>. The usage of Rust is for example purposes only.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="introduction"><a class="header" href="#introduction">Introduction</a></h1>
 <p>The <a href="https://github.com/divnix/std"><code>std</code></a> (short for standard) framework is an opinionated <a href="https://nixos.org">Nix</a>
 <a href="https://nixos.wiki/wiki/Flakes">flakes</a> framework that aims to solve the problem of complexity that
 often arises in large Nix-based projects. It's opinionated because it prescribes
-a standard, flake-based structure for repositories using Nix. As with most
-frameworks with this characteristic, it eliminates the question of <strong>how</strong> Nix
-code should be organized, ultimately serving as a boon for productivity.</p>
+a standard, flake-based structure for repositories using Nix. It eliminates the
+question of <em>how</em> Nix code should be organized and ultimately serves as a boon
+for productivity.</p>
 <p>In this chapter, we will briefly introduce the framework as a whole. As a
 reminder, this book will be starting off with an <a href="https://github.com/jmgilman/std-book/tree/master/rust">example Rust project</a>
 and then slowly integrating the <code>std</code> framework into it. It's recommended you
@@ -173,18 +187,35 @@ contains a single unit test that confirms the above logic works as expected.</p>
 <h2 id="why-std"><a class="header" href="#why-std">Why Std?</a></h2>
 <p><code>std</code> aims to provide a rigid framework for organizing Nix code in a repository.
 Why is this even necessary? The primary reason is that, because Nix can more or
-less do anything, it follows that by nature, it tends to become progressively
-less organized the more lines of it you add to your repository. While flakes
-helped to bring some organization to the entry point of a Nix environment, it
-also disrupted it in other ways (i.e., what to do with <code>system</code>). In the case of
-a monorepo, this nature can quickly become crippling and can result in all sorts
-of unique &quot;frameworks&quot; being developed by each team to address it.</p>
+less do anything, it tends to become progressively less organized the more lines
+of it you add to your repository. While flakes helped to bring some organization
+to the entry point of a Nix environment, it also disrupted it in other ways
+(i.e., what to do with <code>system</code>). In the case of a monorepo, this nature can
+quickly become crippling and often results in all sorts of unique &quot;frameworks&quot;
+being developed by each team to address it.</p>
 <p>For these reasons, <code>std</code> was developed to help reign in large Nix codebases.
 However, it's not only for large projects. As we'll see in this article, it can
-be used in projects of any size and naturally grows along with them. Indeed,
+be used in projects of any size and will naturally grow along with them. Indeed,
 this is the preferred approach because it tackles the complexity before it has a
 chance to grow too unwieldy.</p>
 <h2 id="std-organization"><a class="header" href="#std-organization">Std Organization</a></h2>
+<pre><code class="language-mermaid">%%{ init : { &quot;flowchart&quot; : { &quot;curve&quot; : &quot;linear&quot; }}}%%
+
+flowchart TD
+    repository(Repository)
+    cell1(Cell)
+    cell2(Cell)
+    cellblock1(Cell Block)
+    cellblock2(Cell Block)
+    cellblock3(Cell Block)
+    cellblock4(Cell Block)
+    repository --&gt; cell1
+    repository --&gt; cell2
+    cell1 --&gt; cellblock1
+    cell1 --&gt; cellblock2
+    cell2 --&gt; cellblock3
+    cell2 --&gt; cellblock4
+</code></pre>
 <p>The <code>std</code> framework is broken up into three organizational levels:</p>
 <ul>
 <li><strong>Repository</strong>: This might seem like a given, but the repository serves as the
@@ -208,9 +239,9 @@ provides a necessary degree of flexibility. In this book, we'll give a sample
 cell structure for our project, but the method proposed here is by no means the
 best one for every project.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="a-std-flake"><a class="header" href="#a-std-flake">A <code>std</code> Flake</a></h1>
-<p>The starting point for integrating std with our example project is defining a
-flake.nix file at the root of our repository. As mentioned previously, <code>std</code> is
-a <em>flake-based</em> framework, and usage of Nix flakes is not optional.</p>
+<p>The starting point for integrating <code>std</code> with our example project is defining a
+<code>flake.nix</code> file at the root of our repository. As mentioned previously, <code>std</code>
+is a <em>flake-based</em> framework, and usage of Nix flakes is not optional.</p>
 <p>Throughout this book, we'll be sharing snippets of our growing integration.
 These snippets will make excessive use of localized comments to explain
 concepts, as the proximity of these tends to make explanations much more
@@ -286,10 +317,10 @@ only the new additions will be commented.</p>
 </code></pre>
 <p>Much of the structure presented above should not be surprising as there is no
 major deviation from the <a href="https://nixos.wiki/wiki/Flakes#Flake_schema">expected flake schema</a>. Perhaps the
-largest change occurs in that this structure is primarily generated by
-<code>std`` through the [</code>grow-on` function]<a href="https://github.com/divnix/std/blob/main/src/grow-on.nix">grow-on</a>. The arguments for this
-function are where we primarily derive the structure we discussed in the
-[previous chapter][prev]. Of note are the following:</p>
+largest change occurs in that this structure is primarily generated by <code>std</code>
+through the <a href="https://github.com/divnix/std/blob/main/src/grow-on.nix"><code>grow-on</code> function</a>. The arguments for this function are
+where we primarily derive the structure we discussed in the
+<a href="getting_started/introduction.html">previous chapter</a>. Of note are the following:</p>
 <ul>
 <li><code>cellsFrom</code>: The cells that make up our <em>organism</em> must be defined in a single
 folder within our repository. It's idiomatic to name this folder either
@@ -299,7 +330,7 @@ subdirectory.</li>
 <li><code>cellBlock</code>: Each cell consists of one or more blocks which are defined here
 in list form. Recall that cell blocks are <em>typed</em>, and the general format for
 defining them is <code>(std.blockTypes.&lt;type&gt; &quot;&lt;name&gt;&quot;)</code>; where <code>&lt;type&gt;</code> is a valid
-block type as [defined here][block-types] and <code>&lt;name&gt;</code> is where <code>std</code> should
+block type as <a href="https://github.com/divnix/std/tree/main/src/blocktypes">defined here</a> and <code>&lt;name&gt;</code> is where <code>std</code> should
 look for the cell block under the parent cell's folder.</li>
 </ul>
 <p>With these two arguments, we can bring cohesion to our otherwise disunified Nix
@@ -307,7 +338,7 @@ code. We know where cells are defined, what block types are available, and where
 to find them. Determining where our <em>runnables</em> exist is simply a matter of
 examining our <code>flake.nix</code> and following the paths accordingly.</p>
 <p>The <code>growOn</code> function takes a variadic number of additional arguments and is
-what differentiates it from its [sibling function][grow] (<code>grow</code>). We will dive
+what differentiates it from its <a href="https://github.com/divnix/std/blob/main/src/grow.nix">sibling function</a> (<code>grow</code>). We will dive
 deeper into these additional arguments in a future chapter.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="our-first-cell-block"><a class="header" href="#our-first-cell-block">Our First Cell Block</a></h1>
 <p>The flake, by itself, is not sufficient for a working example. We've told <code>std</code>
@@ -374,10 +405,10 @@ in
 <h2 id="standardized-arguments"><a class="header" href="#standardized-arguments">Standardized Arguments</a></h2>
 <p>One of the major benefits of <code>std</code> can be seen in the first few lines of Nix
 code. As is fairly typical with Nix, the file serves as one large function;
-however, the significance of the argument structure can be easily overlooked,
-though. This structure can be viewed as the <em>standardized</em> form of all cell
-blocks. From these two arguments, it's possible to derive <em>all</em> values required
-to perform our required logic.</p>
+however, the significance of the argument structure can be easily overlooked.
+This structure can be viewed as the <em>standardized</em> form of all cell blocks. From
+these two arguments, it's possible to derive <em>all</em> values required to perform
+our required logic.</p>
 <p>Again, this cannot be overstated: we define the arguments the same way each time
 and are guaranteed access to all of the tools and data required to perform our
 logic. Historically, passing around information in Nix has been a major pain
@@ -422,10 +453,10 @@ git+file:///Users/josh/code/std-book-example
 ├───x86_64-darwin: unknown
 └───x86_64-linux: unknown
 </code></pre>
-<p>This looks strange at first; what is under _<em>std? This attribute is generated
-by the grow functions and is referred to as the _registry</em>. It houses a
-plethora of information about our standardized environment, and you can inspect
-what's under here by running:</p>
+<p>This looks strange at first; what is under <code>__std</code>? This attribute is generated
+by the grow functions and is referred to as the <em>registry</em>. It houses a plethora
+of information about our standardized environment, and you can inspect what's
+under here by running:</p>
 <pre><code class="language-text">nix eval --json .#__std | jq
 </code></pre>
 <p>The output is large, so it will be omitted here, but essentially it describes
@@ -433,10 +464,10 @@ our entire environment, including what cells we have, the blocks (and their
 types) of those cells, what actions we can run on the blocks, etc. The benefit
 here is that it provides a layer by which external tools can utilize the
 information gathered about our environment.</p>
-<p>What about all the unknowns? There is actually data here, but it's important to
-understand that it doesn't conform to the expected flake output schema, so nix
-flake show just marks it as &quot;unknown.&quot; Again, we can see the structure by going
-into the Nix REPL environment:</p>
+<p>What about all the unknowns? There is data here, but it's important to
+understand that it doesn't conform to the expected flake output schema, so
+<code>nix flake show</code> just marks it as &quot;unknown.&quot; Again, we can see the structure by
+going into the Nix REPL environment:</p>
 <pre><code class="language-text">$ nix repl
 Welcome to Nix 2.10.3. Type :? for help.
 
@@ -453,8 +484,8 @@ Hello, world!
 <p>However, this isn't very intuitive, and this is why the <code>growOn</code> function
 becomes helpful. It allows us to add a compatibility layer by transforming the
 above structure into something that the Nix CLI can more easily understand. In
-our case, if we run the same nix flake show command with the <code>growOn</code> function,
-we see:</p>
+our case, if we run the same <code>nix flake show</code> command with the <code>growOn</code>
+function, we see:</p>
 <pre><code class="language-text">$ nix flake show
 git+file:///Users/josh/code/std-book-example
 ├───__functor: unknown
@@ -478,7 +509,7 @@ git+file:///Users/josh/code/std-book-example
 Hello, world!
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="the-std-tui"><a class="header" href="#the-std-tui">The <code>std</code> TUI</a></h1>
-<p>There's one final thing we've gained from our work so far. The <code>std</code> framework
+<p>There's one final thing we have gained from our work so far. The <code>std</code> framework
 ships with a binary that adds a terminal user interface (TUI) to our project.
 The quickest way to experiment with it is to enter a <code>nix-shell</code> with the
 package installed:</p>
@@ -491,11 +522,11 @@ package installed:</p>
 <p><img src="getting_started/../images/tui.png" alt="The std TUI" /></p>
 <p>What we're seeing here is a graphical view of our project. In this case, we have
 a single binary located at <code>//example/apps/default</code> which can be run. How does
-<code>std</code> know this? Recall that we informed <code>std</code> that we had <code>runnables</code> located
+<code>std</code> know this? Recall that we informed <code>std</code> that we have <code>runnables</code> located
 in <code>apps.nix</code>. When <code>std</code> analyzes our repository, it automatically found the
 <code>runnable</code> for our example Rust project and is showing us what we can do with it
 (i.e., run it).</p>
-<p>This may seem trivial, but that's only because our repository is so small. The
+<p>This may seem trivial, but that's only because our repository is small. The
 usefulness of the TUI grows in proportion to the size of our project. As we add
 more and more pieces to it, the TUI begins to become an entry point for
 contributors to explore our repository.</p>
@@ -510,7 +541,7 @@ the structure of the repository:</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="review"><a class="header" href="#review">Review</a></h1>
 <p>Before we continue into more advanced subjects, let's stop for a moment and
 review. What have we gained here? First of all, we have standardized where our
-binary builds are defined for our repository: <code>/nix/std-example/apps.nix</code>. If we
+binary builds are defined for our repository: <code>/nix/example/apps.nix</code>. If we
 want to add additional builds (i.e., a debug binary), we know exactly where to
 put it. As a bonus, we don't even need to worry about the system fiasco that
 flakes are often criticized for.</p>
@@ -520,16 +551,16 @@ sources of complexity in large Nix codebases stems from the question, &quot;How 
 access everything?&quot; In our case:</p>
 <ul>
 <li>Inputs can be accessed via <code>inputs</code></li>
-<li>Anything within our local cell can be accessed via cell</li>
+<li>Anything within our local cell can be accessed via <code>cell</code></li>
 <li>Other cells can be accessed via <code>inputs.cells</code></li>
 </ul>
 <p>Meaning that as long as we adhere to the organizational principles being applied
-with std, we don't have to worry about figuring out where to put things and how
-to access them.</p>
+with <code>std</code>, we don't have to worry about figuring out where to put things and
+how to access them.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="managing-development-shells-devshells"><a class="header" href="#managing-development-shells-devshells">Managing Development Shells (devshells)</a></h1>
 <p>In the remaining chapters of this book, we're going to begin improving the
 foundation we laid in the previous chapter. We've already gained a lot by
-integrating <code>std</code> into our example Rust project, but there remains much more
+integrating <code>std</code> into our example Rust project, but there remains significant
 room for improvement.</p>
 <p>So far, we've seen that <code>std</code> has a lot to offer in terms of bringing
 organization to our Nix-infused repositories. In addition to organization, <code>std</code>
@@ -574,19 +605,19 @@ runs the formatter(s) the same way they may be run in CI.</li>
 can include custom commands or other binaries that are available in the
 environment.</li>
 <li>Package management: package management is made significantly easier by
-allowing specifying packages in several different locations. For example, a
-custom command could be dependent on a package being available and <code>devshell</code>
-will handle the dependency for you automatically.</li>
+allowing packages to be specified in several different locations. For example,
+a custom command could be dependent on a package being available in the
+environment and <code>devshell</code> will handle the dependency for you automatically.</li>
 </ul>
 <p>The <code>std</code> framework provides native support for integrating <code>devshell</code> into our
 standardized project. All that's required is a little bit of configuration on
 our end and we'll be able to provide a rich development shell for contributors
 to use with our example Rust project.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="adding-the-devshell-block"><a class="header" href="#adding-the-devshell-block">Adding the Devshell Block</a></h1>
-<p>As we begin iterating on our project, we'll come across this common idiom: to
-add new functionality to our project, simply add new blocks. In the case of
-<code>devshell</code>, this remains true: to begin, we'll need to add a new cell block to
-our <code>flake.nix</code>:</p>
+<p>As we begin iterating on our project, we'll come across this common theme: to
+add new functionality to our project, simply add new cell blocks. In the case of
+<code>devshell</code>, this remains true: to begin, we'll add a new block to our
+<code>flake.nix</code>:</p>
 <pre><code class="language-nix">{
   inputs.std.url = &quot;github:divnix/std&quot;;
   inputs.nixpkgs.url = &quot;nixpkgs&quot;;
@@ -861,16 +892,15 @@ test test_say_hello ... ok
 
 test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 </code></pre>
-<p>It worked!</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="review-1"><a class="header" href="#review-1">Review</a></h1>
 <p>Let's take stock of what we've been afforded with these changes.</p>
 <ul>
-<li>Took advantage of <code>std</code>'s integration with <code>numtide/devshell</code> and added a
+<li>We took advantage of <code>std</code>'s integration with <code>numtide/devshell</code> and added a
 default development shell to our repository</li>
-<li>Created a nice MOTD for our repository, welcoming contributors and making them
-aware of <code>std</code> and our custom commands</li>
-<li>Added a custom command for running our tests with <code>cargo</code></li>
-<li>Provided contributors with the latest version of the Rust toolchain</li>
+<li>We created a nice MOTD for our repository, welcoming contributors and making
+them aware of <code>std</code> and our custom commands</li>
+<li>We added a custom command for running our tests with <code>cargo</code></li>
+<li>We provided contributors with the latest version of the Rust toolchain</li>
 </ul>
 <p>Finally, to wrap things with a bow, we integrated <code>direnv</code> to automagically load
 us into our new development shell when we <code>cd</code> into our repository root. This is
@@ -881,23 +911,21 @@ but so are the quality-of-life improvements. Contributing to our humble example
 project just became much easier with development shells, and we'll continue this
 theme of improvement in the next chapter.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="managing-configurations"><a class="header" href="#managing-configurations">Managing Configurations</a></h1>
-<p>In the last chapter, we saw how the integration that <code>std</code> has with
-<code>numtide/devshell</code> allows us to easily integrate feature-rich development
-environments into our repository. These allow contributors to quickly get up to
-speed with the tools that are required to contribute to our repository and
-provide a lot towards solving the &quot;works on my machine&quot; problem.</p>
-<p>In this chapter, we're going to look at another integration that <code>std</code> has, this
-time with <a href="https://github.com/nix-community/nixago">Nixago</a>.</p>
+<p>In the last chapter, we saw how the integration with <code>numtide/devshell</code> allows
+us to easily integrate feature-rich development environments into our
+repository. These allow contributors to quickly get up to speed with the tools
+that are required to contribute to our repository and provide a lot towards
+solving the &quot;works on my machine&quot; problem.</p>
+<p>In this chapter, we're going to look at another integration: <a href="https://github.com/nix-community/nixago">Nixago</a>.</p>
 <h2 id="an-introduction-to-nixago"><a class="header" href="#an-introduction-to-nixago">An Introduction to Nixago</a></h2>
 <p>Modern repositories rely on a lot of modern tools for providing things like
-linting, auditing, formatting, compiling, releasing, and the list goes on.
-Sometimes one tool can tackle multiple tasks, but for the most part we often end
-up needing several to cover the whole spectrum. To make matters worse, many of
-these tools bring with them their own configuration with little room for
-interoperability between them.</p>
+linting, auditing, formatting, compiling, releasing, etc. Sometimes one tool can
+tackle multiple tasks, but for the most part we often end up needing several to
+cover the whole spectrum. To make matters worse, many of these tools bring with
+them their own configuration with little room for interoperability between them.</p>
 <p>Nixago was designed to address this problem by doing two things:</p>
 <ol>
-<li>Bringing configuration definitions back into Nix</li>
+<li>Bringing configuration data back into Nix</li>
 <li>Dynamically generating configuration files</li>
 </ol>
 <h3 id="managing-configurations-with-nix"><a class="header" href="#managing-configurations-with-nix">Managing Configurations with Nix</a></h3>
@@ -907,29 +935,29 @@ things, especially when our entire repository is already wired up by Nix using
 <code>std</code>.</p>
 <p>For example, we can apply convenient transformations to data structures or bring
 in data from other parts of the repository to inform how a specific tool should
-be configured. For example, the <code>std</code> <a href="https://github.com/divnix/std/blob/main/cells/std/nixago/conform.nix">integration</a> for
-<a href="https://github.com/siderolabs/conform">conform</a> automatically informs the conventional commit policie of the cell
-names to use as subjects. This is just one example of many possibilities that
-can be put together using <code>std</code>'s Nixago integration.</p>
+be configured. The <code>std</code> <a href="https://github.com/divnix/std/blob/main/cells/std/nixago/conform.nix">integration</a> for <a href="https://github.com/siderolabs/conform">conform</a> does
+this by automatically configuring the conventional commit policy using the cell
+names as subjects. This is just one example of many possibilities that can be
+put together using <code>std</code>'s Nixago integration.</p>
 <h3 id="dynamic-generation"><a class="header" href="#dynamic-generation">Dynamic Generation</a></h3>
 <p>The second benefit that Nixago brings is that configuration files are
 dynamically generated. When a user first enters into a development shell that
 has been configured with Nixago support, it will automatically run its
 pre-generated shell hooks which will generate the required configuration files
-and write them to the repository directory. Most times, these files are simply
-symlinks that point back to the Nix store (and automatically added to
+and write them to the repository directory. Most of the time, these files are
+simply symlinks that point back to the Nix store (and are automatically added to
 <code>.gitignore</code>). However, an option can be specified which switches these to hard
 copies which can then be committed into revision control (to support CI for
 example).</p>
 <h2 id="integration"><a class="header" href="#integration">Integration</a></h2>
 <p>The <code>std</code> framework makes it easy to integrate Nixago into our repository. It
 provides a <a href="https://github.com/divnix/std/blob/main/src/blocktypes/nixago.nix">cell block type</a> which provides direct integration
-with the devshell cell block. This is required, because Nixago relies on shell
-hooks to generate files, and the devshell integration will ensure the hooks are
-run when we enter the environment.</p>
+with the <code>devshell</code> cell block. This is required, because Nixago relies on shell
+hooks to generate files, and the <code>devshell</code> integration will ensure the hooks
+are run when we enter the environment.</p>
 <p>In the remainder of this chapter, we'll work on setting up the Nixago
 integration to configure a few common tools that will prove useful to our
-development.</p>
+development experience.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="adding-a-nixago-block"><a class="header" href="#adding-a-nixago-block">Adding a Nixago Block</a></h1>
 <p>As with any cell block, we'll first add it to our <code>flake.nix</code>:</p>
 <pre><code class="language-nix">{
@@ -959,8 +987,8 @@ development.</p>
 }
 </code></pre>
 <p>This is a fairly trivial addition, the only thing worth noting is that we call
-it <code>configs</code> to reduce ambiguity because most people are not aware of the Nixago
-flake.</p>
+it <code>configs</code> to reduce ambiguity because most people are not aware of what
+Nixago does.</p>
 <h2 id="defining-the-block"><a class="header" href="#defining-the-block">Defining the Block</a></h2>
 <p>The cell block is where the meat of our configuration lies. We'll add the
 following to <code>/cells/example/configs.nix</code>:</p>
@@ -1103,9 +1131,9 @@ in
 }
 </code></pre>
 <p>This is significantly more code, but a majority of it is the actual
-configuration data we're using to generate our files. The output structure of
-the cell block is an attribute set where the value is another attribute set that
-must conform to two things:</p>
+configuration data we're using to generate our files.</p>
+<p>The output structure of the cell block is an attribute set where the value is
+another attribute set that must conform to two things:</p>
 <ol>
 <li>The <a href="https://github.com/nix-community/nixago/blob/master/modules/request.nix">module structure</a> enforced by Nixago</li>
 <li>Any additional pass-through data, which in this case means data intended for
@@ -1119,8 +1147,7 @@ the <a href="https://nix-community.github.io/nixago/quick_start.html">Nixago qui
 <li><code>output</code>: The name of the output file</li>
 <li><code>format</code>: The format of the output file</li>
 </ol>
-<p>Advanced users can specify additional commands to run in shell hooks or change
-the engine to something more advanced (i.e. CUE). The above three options are
+<p>There are a few additional advanced options, but the above three options are
 enough to cover a majority of use cases.</p>
 <p>The <code>std</code> framework provides several &quot;pre-configured&quot; expressions that we can
 make use of to lessen the verbosity of our cell block. These expressions can be
@@ -1150,8 +1177,7 @@ be using. Each of these will be briefly discussed below.</p>
 <h3 id="conform"><a class="header" href="#conform">Conform</a></h3>
 <p>The <a href="https://github.com/siderolabs/conform">conform</a> tool allows us to specify policies that will be enforced against
 our commits. This is an invaluable tool in open-source projects and can help
-bring uniformity to commit messages and can improve the generation of change
-logs.</p>
+bring uniformity to commit messages and improve the generation of change logs.</p>
 <p>In our case, we're specifying that commit message headers can be no longer than
 89 characters and that the message itself must conform (ha!) to the
 <a href="https://www.conventionalcommits.org/en/v1.0.0/">conventional commit specification</a>. Additionally, the <em>type</em> section of the
@@ -1227,7 +1253,7 @@ we've now employed to improve our overall development experience; however, don't
 miss how easy it was to automatically have these tools:</p>
 <ol>
 <li>Dynamically configured using Nix</li>
-<li>Configuration files managed by Nixago.</li>
+<li>Configuration files automatically managed by Nixago.</li>
 <li>Binaries automatically included in the shell environment</li>
 </ol>
 <p>The integration between <code>std</code>, Nixago, and <code>devshell</code> has afforded us a great
@@ -1261,6 +1287,8 @@ useful tools without the risk of becoming too hard to maintain or reproduce.</p>
         <script src="book.js" type="text/javascript" charset="utf-8"></script>
 
         <!-- Custom JS scripts -->
+        <script type="text/javascript" src="theme/mermaid.min.js"></script>
+        <script type="text/javascript" src="theme/mermaid-init.js"></script>
         <script type="text/javascript">
         window.addEventListener('load', function() {
             window.setTimeout(window.print, 100);

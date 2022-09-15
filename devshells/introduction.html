@@ -6,11 +6,10 @@
         <title>Managing Devshells - The Standard Book</title>
         <!-- Custom HTML head -->
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <meta name="description" content="">
+        <meta name="description" content="The official book for the &#x60;std&#x60; framework.">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff" />
 
-        <link rel="icon" href="../favicon.svg">
         <link rel="shortcut icon" href="../favicon.png">
         <link rel="stylesheet" href="../css/variables.css">
         <link rel="stylesheet" href="../css/general.css">
@@ -110,6 +109,12 @@
                         <a href="../print.html" title="Print this book" aria-label="Print this book">
                             <i id="print-button" class="fa fa-print"></i>
                         </a>
+                        <a href="https://github.com/jmgilman/std-book" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/jmgilman/std-book/edit/master/src/devshells/introduction.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
                     </div>
                 </div>
 
@@ -137,7 +142,7 @@
                         <h1 id="managing-development-shells-devshells"><a class="header" href="#managing-development-shells-devshells">Managing Development Shells (devshells)</a></h1>
 <p>In the remaining chapters of this book, we're going to begin improving the
 foundation we laid in the previous chapter. We've already gained a lot by
-integrating <code>std</code> into our example Rust project, but there remains much more
+integrating <code>std</code> into our example Rust project, but there remains significant
 room for improvement.</p>
 <p>So far, we've seen that <code>std</code> has a lot to offer in terms of bringing
 organization to our Nix-infused repositories. In addition to organization, <code>std</code>
@@ -182,9 +187,9 @@ runs the formatter(s) the same way they may be run in CI.</li>
 can include custom commands or other binaries that are available in the
 environment.</li>
 <li>Package management: package management is made significantly easier by
-allowing specifying packages in several different locations. For example, a
-custom command could be dependent on a package being available and <code>devshell</code>
-will handle the dependency for you automatically.</li>
+allowing packages to be specified in several different locations. For example,
+a custom command could be dependent on a package being available in the
+environment and <code>devshell</code> will handle the dependency for you automatically.</li>
 </ul>
 <p>The <code>std</code> framework provides native support for integrating <code>devshell</code> into our
 standardized project. All that's required is a little bit of configuration on
@@ -228,5 +233,7 @@ to use with our example Rust project.</p>
         <script src="../book.js" type="text/javascript" charset="utf-8"></script>
 
         <!-- Custom JS scripts -->
+        <script type="text/javascript" src="../theme/mermaid.min.js"></script>
+        <script type="text/javascript" src="../theme/mermaid-init.js"></script>
     </body>
 </html>

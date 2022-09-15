@@ -6,11 +6,10 @@
         <title>Getting Started - The Standard Book</title>
         <!-- Custom HTML head -->
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <meta name="description" content="">
+        <meta name="description" content="The official book for the &#x60;std&#x60; framework.">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff" />
 
-        <link rel="icon" href="../favicon.svg">
         <link rel="shortcut icon" href="../favicon.png">
         <link rel="stylesheet" href="../css/variables.css">
         <link rel="stylesheet" href="../css/general.css">
@@ -110,6 +109,12 @@
                         <a href="../print.html" title="Print this book" aria-label="Print this book">
                             <i id="print-button" class="fa fa-print"></i>
                         </a>
+                        <a href="https://github.com/jmgilman/std-book" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/jmgilman/std-book/edit/master/src/getting_started/introduction.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
                     </div>
                 </div>
 
@@ -138,9 +143,9 @@
 <p>The <a href="https://github.com/divnix/std"><code>std</code></a> (short for standard) framework is an opinionated <a href="https://nixos.org">Nix</a>
 <a href="https://nixos.wiki/wiki/Flakes">flakes</a> framework that aims to solve the problem of complexity that
 often arises in large Nix-based projects. It's opinionated because it prescribes
-a standard, flake-based structure for repositories using Nix. As with most
-frameworks with this characteristic, it eliminates the question of <strong>how</strong> Nix
-code should be organized, ultimately serving as a boon for productivity.</p>
+a standard, flake-based structure for repositories using Nix. It eliminates the
+question of <em>how</em> Nix code should be organized and ultimately serves as a boon
+for productivity.</p>
 <p>In this chapter, we will briefly introduce the framework as a whole. As a
 reminder, this book will be starting off with an <a href="https://github.com/jmgilman/std-book/tree/master/rust">example Rust project</a>
 and then slowly integrating the <code>std</code> framework into it. It's recommended you
@@ -153,18 +158,35 @@ contains a single unit test that confirms the above logic works as expected.</p>
 <h2 id="why-std"><a class="header" href="#why-std">Why Std?</a></h2>
 <p><code>std</code> aims to provide a rigid framework for organizing Nix code in a repository.
 Why is this even necessary? The primary reason is that, because Nix can more or
-less do anything, it follows that by nature, it tends to become progressively
-less organized the more lines of it you add to your repository. While flakes
-helped to bring some organization to the entry point of a Nix environment, it
-also disrupted it in other ways (i.e., what to do with <code>system</code>). In the case of
-a monorepo, this nature can quickly become crippling and can result in all sorts
-of unique &quot;frameworks&quot; being developed by each team to address it.</p>
+less do anything, it tends to become progressively less organized the more lines
+of it you add to your repository. While flakes helped to bring some organization
+to the entry point of a Nix environment, it also disrupted it in other ways
+(i.e., what to do with <code>system</code>). In the case of a monorepo, this nature can
+quickly become crippling and often results in all sorts of unique &quot;frameworks&quot;
+being developed by each team to address it.</p>
 <p>For these reasons, <code>std</code> was developed to help reign in large Nix codebases.
 However, it's not only for large projects. As we'll see in this article, it can
-be used in projects of any size and naturally grows along with them. Indeed,
+be used in projects of any size and will naturally grow along with them. Indeed,
 this is the preferred approach because it tackles the complexity before it has a
 chance to grow too unwieldy.</p>
 <h2 id="std-organization"><a class="header" href="#std-organization">Std Organization</a></h2>
+<pre><code class="language-mermaid">%%{ init : { &quot;flowchart&quot; : { &quot;curve&quot; : &quot;linear&quot; }}}%%
+
+flowchart TD
+    repository(Repository)
+    cell1(Cell)
+    cell2(Cell)
+    cellblock1(Cell Block)
+    cellblock2(Cell Block)
+    cellblock3(Cell Block)
+    cellblock4(Cell Block)
+    repository --&gt; cell1
+    repository --&gt; cell2
+    cell1 --&gt; cellblock1
+    cell1 --&gt; cellblock2
+    cell2 --&gt; cellblock3
+    cell2 --&gt; cellblock4
+</code></pre>
 <p>The <code>std</code> framework is broken up into three organizational levels:</p>
 <ul>
 <li><strong>Repository</strong>: This might seem like a given, but the repository serves as the
@@ -225,5 +247,7 @@ best one for every project.</p>
         <script src="../book.js" type="text/javascript" charset="utf-8"></script>
 
         <!-- Custom JS scripts -->
+        <script type="text/javascript" src="../theme/mermaid.min.js"></script>
+        <script type="text/javascript" src="../theme/mermaid-init.js"></script>
     </body>
 </html>

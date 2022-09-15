@@ -6,11 +6,10 @@
         <title>Growing - The Standard Book</title>
         <!-- Custom HTML head -->
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <meta name="description" content="">
+        <meta name="description" content="The official book for the &#x60;std&#x60; framework.">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff" />
 
-        <link rel="icon" href="../favicon.svg">
         <link rel="shortcut icon" href="../favicon.png">
         <link rel="stylesheet" href="../css/variables.css">
         <link rel="stylesheet" href="../css/general.css">
@@ -110,6 +109,12 @@
                         <a href="../print.html" title="Print this book" aria-label="Print this book">
                             <i id="print-button" class="fa fa-print"></i>
                         </a>
+                        <a href="https://github.com/jmgilman/std-book" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/jmgilman/std-book/edit/master/src/getting_started/growing.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
                     </div>
                 </div>
 
@@ -151,10 +156,10 @@ git+file:///Users/josh/code/std-book-example
 ├───x86_64-darwin: unknown
 └───x86_64-linux: unknown
 </code></pre>
-<p>This looks strange at first; what is under _<em>std? This attribute is generated
-by the grow functions and is referred to as the _registry</em>. It houses a
-plethora of information about our standardized environment, and you can inspect
-what's under here by running:</p>
+<p>This looks strange at first; what is under <code>__std</code>? This attribute is generated
+by the grow functions and is referred to as the <em>registry</em>. It houses a plethora
+of information about our standardized environment, and you can inspect what's
+under here by running:</p>
 <pre><code class="language-text">nix eval --json .#__std | jq
 </code></pre>
 <p>The output is large, so it will be omitted here, but essentially it describes
@@ -162,10 +167,10 @@ our entire environment, including what cells we have, the blocks (and their
 types) of those cells, what actions we can run on the blocks, etc. The benefit
 here is that it provides a layer by which external tools can utilize the
 information gathered about our environment.</p>
-<p>What about all the unknowns? There is actually data here, but it's important to
-understand that it doesn't conform to the expected flake output schema, so nix
-flake show just marks it as &quot;unknown.&quot; Again, we can see the structure by going
-into the Nix REPL environment:</p>
+<p>What about all the unknowns? There is data here, but it's important to
+understand that it doesn't conform to the expected flake output schema, so
+<code>nix flake show</code> just marks it as &quot;unknown.&quot; Again, we can see the structure by
+going into the Nix REPL environment:</p>
 <pre><code class="language-text">$ nix repl
 Welcome to Nix 2.10.3. Type :? for help.
 
@@ -182,8 +187,8 @@ Hello, world!
 <p>However, this isn't very intuitive, and this is why the <code>growOn</code> function
 becomes helpful. It allows us to add a compatibility layer by transforming the
 above structure into something that the Nix CLI can more easily understand. In
-our case, if we run the same nix flake show command with the <code>growOn</code> function,
-we see:</p>
+our case, if we run the same <code>nix flake show</code> command with the <code>growOn</code>
+function, we see:</p>
 <pre><code class="language-text">$ nix flake show
 git+file:///Users/josh/code/std-book-example
 ├───__functor: unknown
@@ -244,5 +249,7 @@ Hello, world!
         <script src="../book.js" type="text/javascript" charset="utf-8"></script>
 
         <!-- Custom JS scripts -->
+        <script type="text/javascript" src="../theme/mermaid.min.js"></script>
+        <script type="text/javascript" src="../theme/mermaid-init.js"></script>
     </body>
 </html>
