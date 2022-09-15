@@ -17,6 +17,7 @@ l.mapAttrs (_: std.std.lib.mkShell) {
       cell.configs.treefmt
     ];
     packages = [
+      nixpkgs.gh
       nixpkgs.mdbook
     ];
     commands = [
