@@ -137,7 +137,7 @@ in
     };
   };
   # Prettier is a multi-language code formatter.
-  prettier = std.std.lib.mkNixago {
+  prettier = std.lib.dev.mkNixago {
     # We mainly use it here to format the Markdown in our README.
     configData = {
       printWidth = 80;

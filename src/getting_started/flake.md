@@ -43,7 +43,7 @@ only the new additions will be commented.
         # This is one of the most important arguments for the `grow` function.
         # It defines the path where `std` will search for our cells. In this
         # case, we're specifying the `nix` subdirectory. A cell, in this case,
-        # would be defined in a subdirectory under `nix` (i.e. ./nix/cell).
+        # would be defined in a subdirectory under `nix` (e.g. ./nix/cell).
         cellsFrom = ./nix;
 
         # This is the second most important argument for the `grow` function. It
@@ -89,10 +89,10 @@ where we primarily derive the structure we discussed in the
 [previous chapter](introduction.md). Of note are the following:
 
 - `cellsFrom`: The cells that make up our _organism_ must be defined in a single
-  folder within our repository. It's idiomatic to name this folder either
-  `cells` or `nix`. Within this directory, each cell is isolated into a
-  subdirectory, with all of its cell blocks further nested under this
-  subdirectory.
+  folder within our repository. It's idiomatic to name this folder
+  esrc/getting_started/flake.mdither `cells` or `nix`. Within this directory,
+  each cell is isolated into a subdirectory, with all of its cell blocks further
+  nested under this subdirectory.
 - `cellBlock`: Each cell consists of one or more blocks which are defined here
   in list form. Recall that cell blocks are _typed_, and the general format for
   defining them is `(std.blockTypes.<type> "<name>")`; where `<type>` is a valid
@@ -104,7 +104,7 @@ code. We know where cells are defined, what block types are available, and where
 to find them. Determining where our _runnables_ exist is simply a matter of
 examining our `flake.nix` and following the paths accordingly.
 
-The `growOn` function takes a variadic number of additional arguments and is
+The `growOn` function takes a variable number of additional arguments and is
 what differentiates it from its [sibling function][grow] (`grow`). We will dive
 deeper into these additional arguments in a future chapter.
 

@@ -55,8 +55,8 @@ to make fetching the latest version of the toolchain trivial.
 
 We've added two new cell blocks above: one of the `devshells` type and the other
 of the `functions` type. Our development shells will be defined in
-`/nix/cell/devshells.nix` and our toolchain will be defined in
-`/nix/cell/toolchain.nix`. The `devshells` type should be self-explanatory at
+`/nix/example/devshells.nix` and our toolchain will be defined in
+`/nix/example/toolchain.nix`. The `devshells` type should be self-explanatory at
 this point: this is where we will define the development shells available in our
 project. The `functions` type is a bit unique and serves as a general type for
 storing cell-specific Nix expressions. In this case, we're creating a
