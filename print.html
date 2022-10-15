@@ -278,7 +278,7 @@ only the new additions will be commented.</p>
         # This is one of the most important arguments for the `grow` function.
         # It defines the path where `std` will search for our cells. In this
         # case, we're specifying the `nix` subdirectory. A cell, in this case,
-        # would be defined in a subdirectory under `nix` (i.e. ./nix/cell).
+        # would be defined in a subdirectory under `nix` (e.g. ./nix/cell).
         cellsFrom = ./nix;
 
         # This is the second most important argument for the `grow` function. It
@@ -323,10 +323,10 @@ where we primarily derive the structure we discussed in the
 <a href="getting_started/introduction.html">previous chapter</a>. Of note are the following:</p>
 <ul>
 <li><code>cellsFrom</code>: The cells that make up our <em>organism</em> must be defined in a single
-folder within our repository. It's idiomatic to name this folder either
-<code>cells</code> or <code>nix</code>. Within this directory, each cell is isolated into a
-subdirectory, with all of its cell blocks further nested under this
-subdirectory.</li>
+folder within our repository. It's idiomatic to name this folder
+esrc/getting_started/flake.mdither <code>cells</code> or <code>nix</code>. Within this directory,
+each cell is isolated into a subdirectory, with all of its cell blocks further
+nested under this subdirectory.</li>
 <li><code>cellBlock</code>: Each cell consists of one or more blocks which are defined here
 in list form. Recall that cell blocks are <em>typed</em>, and the general format for
 defining them is <code>(std.blockTypes.&lt;type&gt; &quot;&lt;name&gt;&quot;)</code>; where <code>&lt;type&gt;</code> is a valid
@@ -337,7 +337,7 @@ look for the cell block under the parent cell's folder.</li>
 code. We know where cells are defined, what block types are available, and where
 to find them. Determining where our <em>runnables</em> exist is simply a matter of
 examining our <code>flake.nix</code> and following the paths accordingly.</p>
-<p>The <code>growOn</code> function takes a variadic number of additional arguments and is
+<p>The <code>growOn</code> function takes a variable number of additional arguments and is
 what differentiates it from its <a href="https://github.com/divnix/std/blob/main/src/grow.nix">sibling function</a> (<code>grow</code>). We will dive
 deeper into these additional arguments in a future chapter.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="our-first-cell-block"><a class="header" href="#our-first-cell-block">Our First Cell Block</a></h1>
@@ -347,7 +347,7 @@ defined any blocks.</p>
 <p>To resolve this, we'll create a new file: <code>./nix/example/apps.nix</code>.</p>
 <ul>
 <li><code>./nix/</code>: Defined in our <code>cellsFrom</code> argument in the <code>flake.nix</code></li>
-<li><code>./example/</code>: The name of our cell.</li>
+<li><code>example/</code>: The name of our cell.</li>
 <li><code>apps.nix</code>: The name of our cell block.</li>
 </ul>
 <p>Hopefully, the <code>std</code> structure is starting to become natural now. Here are the
@@ -384,7 +384,7 @@ in
     version = &quot;0.1.0&quot;;
 
     # `std` includes some useful helper functions, one of which is `incl` which
-    # handles filtering out unwanteed files from our package src. The benefit
+    # handles filtering out unwanted files from our package src. The benefit
     # here is it reduces unecessary builds by limiting the input files of our
     # derivation to only those that are needed to build it.
     src = std.incl (inputs.self) [
@@ -408,7 +408,7 @@ code. As is fairly typical with Nix, the file serves as one large function;
 however, the significance of the argument structure can be easily overlooked.
 This structure can be viewed as the <em>standardized</em> form of all cell blocks. From
 these two arguments, it's possible to derive <em>all</em> values required to perform
-our required logic.</p>
+our logic.</p>
 <p>Again, this cannot be overstated: we define the arguments the same way each time
 and are guaranteed access to all of the tools and data required to perform our
 logic. Historically, passing around information in Nix has been a major pain
@@ -665,8 +665,8 @@ toolchain</a>. We'll use this below in our <code>toolchain</code> cell block
 to make fetching the latest version of the toolchain trivial.</p>
 <p>We've added two new cell blocks above: one of the <code>devshells</code> type and the other
 of the <code>functions</code> type. Our development shells will be defined in
-<code>/nix/cell/devshells.nix</code> and our toolchain will be defined in
-<code>/nix/cell/toolchain.nix</code>. The <code>devshells</code> type should be self-explanatory at
+<code>/nix/example/devshells.nix</code> and our toolchain will be defined in
+<code>/nix/example/toolchain.nix</code>. The <code>devshells</code> type should be self-explanatory at
 this point: this is where we will define the development shells available in our
 project. The <code>functions</code> type is a bit unique and serves as a general type for
 storing cell-specific Nix expressions. In this case, we're creating a
@@ -1089,7 +1089,7 @@ in
     };
   };
   # Prettier is a multi-language code formatter.
-  prettier = std.std.lib.mkNixago {
+  prettier = std.lib.dev.mkNixago {
     # We mainly use it here to format the Markdown in our README.
     configData = {
       printWidth = 80;
