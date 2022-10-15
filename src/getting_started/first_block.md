@@ -7,7 +7,7 @@ defined any blocks.
 To resolve this, we'll create a new file: `./nix/example/apps.nix`.
 
 - `./nix/`: Defined in our `cellsFrom` argument in the `flake.nix`
-- `./example/`: The name of our cell.
+- `example/`: The name of our cell.
 - `apps.nix`: The name of our cell block.
 
 Hopefully, the `std` structure is starting to become natural now. Here are the
@@ -46,7 +46,7 @@ in
     version = "0.1.0";
 
     # `std` includes some useful helper functions, one of which is `incl` which
-    # handles filtering out unwanteed files from our package src. The benefit
+    # handles filtering out unwanted files from our package src. The benefit
     # here is it reduces unecessary builds by limiting the input files of our
     # derivation to only those that are needed to build it.
     src = std.incl (inputs.self) [
@@ -72,7 +72,7 @@ code. As is fairly typical with Nix, the file serves as one large function;
 however, the significance of the argument structure can be easily overlooked.
 This structure can be viewed as the _standardized_ form of all cell blocks. From
 these two arguments, it's possible to derive _all_ values required to perform
-our required logic.
+our logic.
 
 Again, this cannot be overstated: we define the arguments the same way each time
 and are guaranteed access to all of the tools and data required to perform our
