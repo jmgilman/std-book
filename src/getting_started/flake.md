@@ -1,14 +1,18 @@
 # A `std` Flake
 
 The starting point for integrating `std` with our example project is defining a
-`flake.nix` file at the root of our repository. As mentioned previously, `std`
-is a _flake-based_ framework, and usage of Nix flakes is not optional.
+`flake.nix` file at the root of our project. As mentioned previously, `std` is a
+_flake-based_ framework, and usage of Nix flakes is not optional.
 
 Throughout this book, we'll be sharing snippets of our growing integration.
 These snippets will make excessive use of localized comments to explain
 concepts, as the proximity of these tends to make explanations much more
 effective. As our code base grows, repeat code will have comments stripped and
 only the new additions will be commented.
+
+If you haven't already done so, [clone the repository][prj-src] and move into
+the `rust` subdirectory where our source files are. Create a `flake.nix` file as
+shown in the next section.
 
 ## Our `std` Flake
 
@@ -112,3 +116,4 @@ deeper into these additional arguments in a future chapter.
 [flake-schema]: https://nixos.wiki/wiki/Flakes#Flake_schema
 [grow]: https://github.com/divnix/std/blob/main/src/grow.nix
 [grow-on]: https://github.com/divnix/std/blob/main/src/grow-on.nix
+[prj-src]: https://github.com/jmgilman/std-book

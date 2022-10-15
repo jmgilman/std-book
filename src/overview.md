@@ -17,7 +17,13 @@ written in a way that can still be useful as a quick reference.
 Since `std` is a [Nix] framework and is intended to be used to organize code
 repositories, it makes sense to work through applying it to an example project.
 In this book, we're using a very basic Rust project, for which the source code
-can be [found here][prj-src].
+can be [found here][prj-src]. Before diving into the book, it's recommended that
+you clone the repository locally:
+
+```bash
+git clone https://github.com/jmgilman/std-book/
+cd std-book/rust  # <--- We'll be adding our nix files here
+```
 
 Throughout the book, we'll be building out an environment that uses the above
 example project. The final source code for the completed example project can be
