@@ -141,13 +141,16 @@
                     <main>
                         <h1 id="a-std-flake"><a class="header" href="#a-std-flake">A <code>std</code> Flake</a></h1>
 <p>The starting point for integrating <code>std</code> with our example project is defining a
-<code>flake.nix</code> file at the root of our repository. As mentioned previously, <code>std</code>
-is a <em>flake-based</em> framework, and usage of Nix flakes is not optional.</p>
+<code>flake.nix</code> file at the root of our project. As mentioned previously, <code>std</code> is a
+<em>flake-based</em> framework, and usage of Nix flakes is not optional.</p>
 <p>Throughout this book, we'll be sharing snippets of our growing integration.
 These snippets will make excessive use of localized comments to explain
 concepts, as the proximity of these tends to make explanations much more
 effective. As our code base grows, repeat code will have comments stripped and
 only the new additions will be commented.</p>
+<p>If you haven't already done so, <a href="https://github.com/jmgilman/std-book">clone the repository</a> and move into
+the <code>rust</code> subdirectory where our source files are. Create a <code>flake.nix</code> file as
+shown in the next section.</p>
 <h2 id="our-std-flake"><a class="header" href="#our-std-flake">Our <code>std</code> Flake</a></h2>
 <pre><code class="language-nix">{
   # Like any flake, we define a set of inputs that should be accessible to our
@@ -224,10 +227,10 @@ where we primarily derive the structure we discussed in the
 <a href="introduction.html">previous chapter</a>. Of note are the following:</p>
 <ul>
 <li><code>cellsFrom</code>: The cells that make up our <em>organism</em> must be defined in a single
-folder within our repository. It's idiomatic to name this folder
-esrc/getting_started/flake.mdither <code>cells</code> or <code>nix</code>. Within this directory,
-each cell is isolated into a subdirectory, with all of its cell blocks further
-nested under this subdirectory.</li>
+folder within our repository. It's idiomatic to name this folder either
+<code>cells</code> or <code>nix</code>. Within this directory, each cell is isolated into a
+subdirectory, with all of its cell blocks further nested under this
+subdirectory.</li>
 <li><code>cellBlock</code>: Each cell consists of one or more blocks which are defined here
 in list form. Recall that cell blocks are <em>typed</em>, and the general format for
 defining them is <code>(std.blockTypes.&lt;type&gt; &quot;&lt;name&gt;&quot;)</code>; where <code>&lt;type&gt;</code> is a valid
