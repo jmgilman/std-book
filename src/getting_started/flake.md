@@ -89,10 +89,10 @@ where we primarily derive the structure we discussed in the
 [previous chapter](introduction.md). Of note are the following:
 
 - `cellsFrom`: The cells that make up our _organism_ must be defined in a single
-  folder within our repository. It's idiomatic to name this folder
-  esrc/getting_started/flake.mdither `cells` or `nix`. Within this directory,
-  each cell is isolated into a subdirectory, with all of its cell blocks further
-  nested under this subdirectory.
+  folder within our repository. It's idiomatic to name this folder either
+  `cells` or `nix`. Within this directory, each cell is isolated into a
+  subdirectory, with all of its cell blocks further nested under this
+  subdirectory.
 - `cellBlock`: Each cell consists of one or more blocks which are defined here
   in list form. Recall that cell blocks are _typed_, and the general format for
   defining them is `(std.blockTypes.<type> "<name>")`; where `<type>` is a valid
