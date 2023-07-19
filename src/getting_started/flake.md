@@ -112,7 +112,7 @@ The `growOn` function takes a variable number of additional arguments and is
 what differentiates it from its [sibling function][grow] (`grow`). We will dive
 deeper into these additional arguments in a future chapter.
 
-[block-types]: https://github.com/divnix/std/tree/main/src/blocktypes
+[block-types]: https://github.com/divnix/std/blob/main/docs/reference/blocktypes.md
 [flake-schema]: https://nixos.wiki/wiki/Flakes#Flake_schema
 [grow]: https://github.com/divnix/std/blob/main/src/grow.nix
 [grow-on]: https://github.com/divnix/std/blob/main/src/grow-on.nix
