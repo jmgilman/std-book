@@ -18,6 +18,7 @@ l.mapAttrs (_: std.std.lib.mkShell) {
     ];
     packages = [
       nixpkgs.gh
+      nixpkgs.jq
       nixpkgs.mdbook
     ];
     commands = [
